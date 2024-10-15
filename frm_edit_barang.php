@@ -126,9 +126,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         <!-- ID Barang -->
         <div class="row mb-2">
-          <label for="id_barang_pemda" class="col-sm-3 col-form-label">ID Simabar: <span style="color: red;">*</span></label>
+          <label for="id_barang_pemda" class="col-sm-3 col-form-label">ID Pemda: <span style="color: red;">*</span></label>
           <div class="col-sm-8">
-            <input type="text" id="id_barang_pemda" name="id_barang_pemda" class="form-control" value="<?php echo htmlspecialchars($row_barang['id_barang_pemda']); ?>" required>
+            <input type="text" id="id_barang_pemda" name="id_barang_pemda" class="form-control" value="<?php echo htmlspecialchars($row_barang['id_barang_pemda']); ?>" readonly style="background-color: #f0f0f0;">
           </div>
         </div>
 
@@ -403,9 +403,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         <!-- Masa Manfaat -->
         <div class="row mb-2">
-          <label for="masa_manfaat" class="col-sm-3 col-form-label">Masa Manfaat (Bulan): <span style="color: red;">*</span></label>
+          <label for="masa_manfaat" class="col-sm-3 col-form-label">Masa Manfaat : <span style="color: red;">*</span></label>
           <div class="col-sm-8">
-            <input type="number" id="masa_manfaat" name="masa_manfaat" class="form-control" value="<?php echo htmlspecialchars($row_barang['masa_manfaat']); ?>" required>
+            <div class="input-group">
+              <input type="number" id="masa_manfaat" name="masa_manfaat" class="form-control" value="<?php echo htmlspecialchars($row_barang['masa_manfaat']); ?>" required>
+              <span class="input-group-text">Bulan</span>
+            </div>
           </div>
         </div>
 

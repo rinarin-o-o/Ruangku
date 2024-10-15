@@ -25,7 +25,7 @@
   </div><!-- End Search Bar and Add Button -->
 
   <!-- Data Table -->
-  <table class="table table-bordered">
+  <table class="table table-bordered" style="font-size: 14px;">
     <thead class="table-secondary text-center">
       <tr>
         <th scope="col">ID Pemeliharaan</th>

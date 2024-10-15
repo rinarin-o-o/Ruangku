@@ -40,95 +40,96 @@ $selected_year = isset($_POST['year']) ? mysqli_real_escape_string($conn, $_POST
       </ol>
     </nav>
   </div><!-- End Page Title -->
+  <div class="card">
+    <div class="card-body" style="padding-top: 30px;">
+      <!-- Select Bulan dan Tahun dan Edit Button -->
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <form class="d-flex align-items-center" method="POST" action="#" id="filterForm">
+          <!-- Dropdown untuk bulan -->
+          <div class="dropdown-icon-wrapper position-relative">
+            <select class="form-select " name="month" aria-label="Default select example">
+              <option value="" disabled <?= $selected_month == '' ? 'selected' : '' ?>>Bulan</option>
+              <!-- Opsi bulan -->
+              <?php for ($i = 1; $i <= 12; $i++) {
+                $month = sprintf("%02d", $i);
+                $monthName = date("F", mktime(0, 0, 0, $i, 10));
+                echo "<option value='$month' " . ($selected_month == $month ? 'selected' : '') . ">$monthName</option>";
+              } ?>
+            </select>
+          </div>
 
-  <!-- Select Bulan dan Tahun dan Edit Button -->
-  <div class="d-flex justify-content-between align-items-center mb-3">
-    <form class="d-flex align-items-center" method="POST" action="#" id="filterForm">
-      <!-- Dropdown untuk bulan -->
-      <div class="dropdown-icon-wrapper position-relative">
-        <select class="form-select" name="month" aria-label="Default select example">
-          <option value="" disabled <?= $selected_month == '' ? 'selected' : '' ?>>Bulan</option>
-          <!-- Opsi bulan -->
-          <?php for ($i = 1; $i <= 12; $i++) {
-            $month = sprintf("%02d", $i);
-            $monthName = date("F", mktime(0, 0, 0, $i, 10));
-            echo "<option value='$month' " . ($selected_month == $month ? 'selected' : '') . ">$monthName</option>";
-          } ?>
-        </select>
-      </div>
+          <!-- Dropdown untuk tahun -->
+          <div class="dropdown-icon-wrapper position-relative">
+            <select class="form-select" name="year" aria-label="Default select example">
+              <option value="" disabled <?= $selected_year == '' ? 'selected' : '' ?>>Tahun</option>
+              <?php
+              $currentYear = date("Y");
+              for ($i = $currentYear; $i >= 2024; $i--) {
+                echo "<option value='$i' " . ($selected_year == $i ? 'selected' : '') . ">$i</option>";
+              }
+              ?>
+            </select>
+          </div>
 
-      <!-- Dropdown untuk tahun -->
-      <div class="dropdown-icon-wrapper position-relative">
-        <select class="form-select" name="year" aria-label="Default select example">
-          <option value="" disabled <?= $selected_year == '' ? 'selected' : '' ?>>Tahun</option>
+          <button type="submit" class="btn btn-primary btn-sm ms-2">Filter</button>
+        </form>
+      </div><!-- End Select Bulan dan Tahun -->
+
+      <!-- Data Table -->
+      <table class="table table-bordered" style="font-size: 12px;">
+        <thead class="table-secondary text-center">
+          <tr>
+            <th scope="col">ID Mutasi</th>
+            <th scope="col">ID Barang</th>
+            <th scope="col">Kode Barang</th>
+            <th scope="col">Nama Barang</th>
+            <th scope="col">Lokasi Sebelumnya</th>
+            <th scope="col">Lokasi Sekarang</th>
+            <th scope="col">Jenis Mutasi</th>
+            <th scope="col">Tanggal Mutasi</th>
+            <th scope="col">PJ</th>
+            <th scope="col">Ket</th>
+            <th scope="col">Aksi</th>
+          </tr>
+        </thead>
+        <tbody>
           <?php
-          $currentYear = date("Y");
-          for ($i = $currentYear; $i >= 2024; $i--) {
-            echo "<option value='$i' " . ($selected_year == $i ? 'selected' : '') . ">$i</option>";
+          // Search Query
+          $search_query = "";
+          if (isset($_POST['query']) && !empty($_POST['query'])) {
+            $search = mysqli_real_escape_string($conn, $_POST['query']);
+            $search_query = " WHERE kode_barang LIKE '%$search%' OR nama_barang LIKE '%$search%'";
           }
-          ?>
-        </select>
-      </div>
 
-      <button type="submit" class="btn btn-primary ms-2">Filter</button>
-    </form>
-  </div><!-- End Select Bulan dan Tahun -->
+          // Constructing date filter query
+          $date_filter_query = "";
+          if (!empty($selected_month) && !empty($selected_year)) {
+            if (!empty($search_query)) {
+              $date_filter_query = " AND MONTH(tgl_mutasi) = '$selected_month' AND YEAR(tgl_mutasi) = '$selected_year'";
+            } else {
+              $date_filter_query = " WHERE MONTH(tgl_mutasi) = '$selected_month' AND YEAR(tgl_mutasi) = '$selected_year'";
+            }
+          }
 
-  <!-- Data Table -->
-  <table class="table table-bordered">
-    <thead class="table-secondary text-center">
-      <tr>
-        <th scope="col">ID Mutasi</th>
-        <th scope="col">ID Barang</th>
-        <th scope="col">Kode Barang</th>
-        <th scope="col">Nama Barang</th>
-        <th scope="col">Lokasi Sebelumnya</th>
-        <th scope="col">Lokasi Sekarang</th>
-        <th scope="col">Jenis Mutasi</th>
-        <th scope="col">Tanggal Mutasi</th>
-        <th scope="col">PenanggungJawab</th>
-        <th scope="col">Keterangan</th>
-        <th scope="col">Aksi</th>
-      </tr>
-    </thead>
-    <tbody>
-      <?php
-      // Search Query
-      $search_query = "";
-      if (isset($_POST['query']) && !empty($_POST['query'])) {
-        $search = mysqli_real_escape_string($conn, $_POST['query']);
-        $search_query = " WHERE kode_barang LIKE '%$search%' OR nama_barang LIKE '%$search%'";
-      }
+          // Fetching the total number of records for pagination
+          $query_count = "SELECT COUNT(*) AS total_records FROM mutasi_barang" . $search_query . $date_filter_query;
+          $result_count = mysqli_query($conn, $query_count);
+          $total_records = mysqli_fetch_assoc($result_count)['total_records'];
+          $total_pages = ceil($total_records / $limit);
 
-      // Constructing date filter query
-      $date_filter_query = "";
-      if (!empty($selected_month) && !empty($selected_year)) {
-        if (!empty($search_query)) {
-          $date_filter_query = " AND MONTH(tgl_mutasi) = '$selected_month' AND YEAR(tgl_mutasi) = '$selected_year'";
-        } else {
-          $date_filter_query = " WHERE MONTH(tgl_mutasi) = '$selected_month' AND YEAR(tgl_mutasi) = '$selected_year'";
-        }
-      }
-
-      // Fetching the total number of records for pagination
-      $query_count = "SELECT COUNT(*) AS total_records FROM mutasi_barang" . $search_query . $date_filter_query;
-      $result_count = mysqli_query($conn, $query_count);
-      $total_records = mysqli_fetch_assoc($result_count)['total_records'];
-      $total_pages = ceil($total_records / $limit);
-
-      // Fetching data with sorting, pagination, and optional search
-      $query = "SELECT id_mutasi, id_barang_pemda, kode_barang, nama_barang, ruang_asal, ruang_tujuan, jenis_mutasi, tgl_mutasi, penanggungjawab, keterangan 
+          // Fetching data with sorting, pagination, and optional search
+          $query = "SELECT id_mutasi, id_barang_pemda, kode_barang, nama_barang, ruang_asal, ruang_tujuan, jenis_mutasi, tgl_mutasi, penanggungjawab, keterangan 
                 FROM mutasi_barang
                 $search_query
                 $date_filter_query
                 ORDER BY tgl_mutasi DESC 
                 LIMIT $start, $limit";
-      $result = mysqli_query($conn, $query);
+          $result = mysqli_query($conn, $query);
 
-      // Displaying fetched data
-      if (mysqli_num_rows($result) > 0) {
-        while ($row = mysqli_fetch_assoc($result)) {
-          echo "<tr class='text-center'>
+          // Displaying fetched data
+          if (mysqli_num_rows($result) > 0) {
+            while ($row = mysqli_fetch_assoc($result)) {
+              echo "<tr class='text-center'>
                       <td>{$row['id_mutasi']}</td>
                       <td>{$row['id_barang_pemda']}</td>
                       <td>{$row['kode_barang']}</td>
@@ -144,36 +145,38 @@ $selected_year = isset($_POST['year']) ? mysqli_real_escape_string($conn, $_POST
                     </a>
                             </td>
                     </tr>";
-        }
-      } else {
-        echo "<tr><td colspan='10' class='text-center'>No data available</td></tr>";
-      }
+            }
+          } else {
+            echo "<tr><td colspan='10' class='text-center'>No data available</td></tr>";
+          }
 
-      mysqli_close($conn);
-      ?>
-    </tbody>
-  </table>
+          mysqli_close($conn);
+          ?>
+        </tbody>
+      </table>
 
-  <!-- Pagination Links -->
-  <?php if ($total_records > $limit) : ?>
-    <nav aria-label="Page navigation example" class="d-flex justify-content-center">
-      <ul class="pagination">
-        <li class="page-item <?= ($page <= 1) ? 'disabled' : '' ?>">
-          <a class="page-link" href="?page=<?= ($page > 1) ? ($page - 1) : 1 ?>" tabindex="-1" aria-disabled="true">Sebelumnya</a>
-        </li>
+      <!-- Pagination Links -->
+      <?php if ($total_records > $limit) : ?>
+        <nav aria-label="Page navigation example" class="d-flex justify-content-center">
+          <ul class="pagination">
+            <li class="page-item <?= ($page <= 1) ? 'disabled' : '' ?>">
+              <a class="page-link" href="?page=<?= ($page > 1) ? ($page - 1) : 1 ?>" tabindex="-1" aria-disabled="true">Sebelumnya</a>
+            </li>
 
-        <?php for ($i = 1; $i <= $total_pages; $i++) : ?>
-          <li class="page-item <?= ($i == $page) ? 'active' : '' ?>">
-            <a class="page-link" href="?page=<?= $i; ?>"><?= $i; ?></a>
-          </li>
-        <?php endfor; ?>
+            <?php for ($i = 1; $i <= $total_pages; $i++) : ?>
+              <li class="page-item <?= ($i == $page) ? 'active' : '' ?>">
+                <a class="page-link" href="?page=<?= $i; ?>"><?= $i; ?></a>
+              </li>
+            <?php endfor; ?>
 
-        <li class="page-item <?= ($page >= $total_pages) ? 'disabled' : '' ?>">
-          <a class="page-link" href="?page=<?= ($page < $total_pages) ? ($page + 1) : $total_pages ?>">Selanjutnya</a>
-        </li>
-      </ul>
-    </nav>
-  <?php endif; ?>
+            <li class="page-item <?= ($page >= $total_pages) ? 'disabled' : '' ?>">
+              <a class="page-link" href="?page=<?= ($page < $total_pages) ? ($page + 1) : $total_pages ?>">Selanjutnya</a>
+            </li>
+          </ul>
+        </nav>
+      <?php endif; ?>
+    </div>
+  </div>
 
 </main><!-- End Main Content -->
 

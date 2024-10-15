@@ -29,7 +29,7 @@ while ($location = mysqli_fetch_assoc($locations_result)) {
 
                 <!-- ID Barang -->
                 <div class="row mb-2">
-                    <label for="id_barang_pemda" class="col-sm-3 col-form-label">ID Barang: <span style="color: red;">*</span></label>
+                    <label for="id_barang_pemda" class="col-sm-3 col-form-label">ID Pemda: <span style="color: red;">*</span></label>
                     <div class="col-sm-8">
                         <input type="text" id="id_barang_pemda" name="id_barang_pemda" class="form-control" required>
                     </div>
@@ -389,16 +389,7 @@ while ($location = mysqli_fetch_assoc($locations_result)) {
                     </div>
                 </div>
 
-                <!-- Harga Keseluruhan -->
-                <div class="row mb-2">
-                    <label for="harga_total" class="col-sm-3 col-form-label">Harga Keseluruhan: <span style="color: red;">*</span></label>
-                    <div class="col-sm-8">
-                        <div class="input-group">
-                            <span class="input-group-text">Rp</span>
-                            <input type="text" id="harga_total" name="harga_total" class="form-control" id="harga_total" step="0.01">
-                        </div>
-                    </div>
-                </div>
+                <input type="hidden" id="harga_total" name="harga_total" class="form-control" id="harga_total" step="0.01">
 
                 <div class="row mb-2">
                     <label for="tgl_pembelian" class="col-sm-3 col-form-label">Tanggal Pembelian <span style="color: red;">*</span></label>
@@ -416,9 +407,12 @@ while ($location = mysqli_fetch_assoc($locations_result)) {
 
                 <!-- Masa Manfaat -->
                 <div class="row mb-2">
-                    <label for="masa_manfaat" class="col-sm-3 col-form-label">Masa Manfaat (Bulan): <span style="color: red;">*</span></label>
+                    <label for="masa_manfaat" class="col-sm-3 col-form-label">Masa Manfaat : <span style="color: red;">*</span></label>
                     <div class="col-sm-8">
-                        <input type="number" id="masa_manfaat" name="masa_manfaat" class="form-control" id="masa_manfaat" required>
+                        <div class="input-group">
+                            <input type="number" id="masa_manfaat" name="masa_manfaat" class="form-control" id="masa_manfaat" required>
+                            <span class="input-group-text">Bulan</span>
+                        </div>
                     </div>
                 </div>
 

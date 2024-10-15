@@ -93,6 +93,14 @@ if (mysqli_num_rows($result) > 0) {
           </div>
         </div>
 
+        <!-- Tanggal Pembelian -->
+        <div class="row mb-2">
+          <label for="tgl_pembukuan" class="col-sm-3 col-form-label">Tanggal Pembukuan:</label>
+          <div class="col-sm-8">
+            <input type="text" id="tgl_pembukuan" class="form-control" value="<?php echo date('d/m/Y', strtotime($row['tgl_pembukuan'])); ?>" readonly>
+          </div>
+        </div>
+
         <!-- Kategori -->
         <div class="row mb-2">
           <label for="kategori" class="col-sm-3 col-form-label">Kategori:</label>
@@ -186,7 +194,7 @@ if (mysqli_num_rows($result) > 0) {
         </div>
 
         <div class="row mb-2">
-          <label for="harga_total" class="col-sm-3 col-form-label">Harga Total:</label>
+          <label for="harga_total" class="col-sm-3 col-form-label">Biaya Pemeliharaan:</label>
           <div class="col-sm-8">
             <div class="input-group">
               <span class="input-group-text">Rp</span>

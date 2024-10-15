@@ -54,7 +54,7 @@ $selected_year = isset($_POST['year']) ? mysqli_real_escape_string($conn, $_POST
   </div><!-- End Select Bulan dan Tahun dan Edit Button -->
 
   <!-- Data Table -->
-  <table class="table table-bordered">
+  <table class="table table-bordered" style="font-size: 14px;">
     <thead class="table-secondary text-center">
       <tr>
         <th scope="col">No</th>
@@ -109,7 +109,7 @@ $selected_year = isset($_POST['year']) ? mysqli_real_escape_string($conn, $_POST
           <td>{$row['tgl_selesai']} {$row['waktu_selesai']}</td>
           <td>{$row['pengguna']}</td>
           <td>
-          <a href='jd_frm_edit_kendaraan.php?id_jadwal_kendaraan={$row['id_jadwal_kendaraan']}' class='btn btn-warning btn-sm' title='Selengkapnya'>
+          <a href='jd_frm_edit_kendaraan.php?id_jadwal_kendaraan={$row['id_jadwal_kendaraan']}' class='btn btn-info btn-sm' title='Selengkapnya'>
           <i class='bi bi-info-circle'></i>
  
           </a>
