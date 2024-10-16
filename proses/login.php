@@ -1,6 +1,6 @@
 <?php
 session_start();
-include '../koneksi/koneksi.php';
+require_once '../koneksi/koneksi.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = $_POST['username'];
@@ -12,23 +12,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     mysqli_stmt_execute($stmt);
     $result = mysqli_stmt_get_result($stmt);
 
-    if (mysqli_num_rows($result) == 1) {
+    if (mysqli_num_rows($result) === 1) {
         $row = mysqli_fetch_assoc($result);
-        if ($password === $row['password']) { // Adjust according to your password storage method
-            $_SESSION['admin_id'] = $row['id_admin'];
-            $_SESSION['admin_name'] = $row['nama_admin'];
+
+        // Verifikasi password dengan password_verify()
+        if (password_verify($password, $row['password'])) {
+            $_SESSION['nama_admin'] = $row['nama_admin'];
+            $_SESSION['foto_admin'] = $row['foto_admin'];
             header('Location: ../home.php');
             exit();
         } else {
             echo "<script>
-                alert('Username atau Password salah, ulangi!');
+                alert('Login gagal. Periksa kembali username dan password Anda.');
                 window.location = '../login_admin.php';
                 </script>";
             exit();
         }
     } else {
         echo "<script>
-            alert('Username atau Password salah, ulangi!');
+            alert('Login gagal. Periksa kembali username dan password Anda.');
             window.location = '../login_admin.php';
             </script>";
         exit();
