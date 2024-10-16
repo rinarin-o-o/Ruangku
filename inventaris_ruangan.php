@@ -106,7 +106,7 @@ $total_pages = ceil($total_records / $limit);
               <i class="bi bi-file-earmark-excel"></i> Cetak KIR
             </a>
 
-            <a href="proses/inventaris/export_label_kir_xls.php?id_lokasi=<?= $id_lokasi ?>" class="btn btn-outline-warning btn-sm">
+            <a href="proses/inventaris/export_label_kir_pdf.php?id_lokasi=<?= $id_lokasi ?>" class="btn btn-outline-warning btn-sm">
               <i class="bi bi-printer"></i> Cetak Label Barang
             </a>
           </div>
@@ -178,7 +178,7 @@ $total_pages = ceil($total_records / $limit);
         <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab" style="padding-top: 20px;" style="padding-bottom: 10px;">
           <?php
           $folder = "proses/inventaris/qrcodes/ruang/"; // Pastikan ada trailing slash
-          $kode = $nama_ruang . " " . $id_lokasi;
+          $kode = $id_lokasi;
           $filename = $folder . "inventaris_" . $nama_ruang . ".png";
 
           require_once('proses/qrcode/qrlib.php');
