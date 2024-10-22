@@ -46,10 +46,10 @@ $sheet1->setCellValue('A7', isset($rowlokasi['bid_lokasi']) ? 'Ruangan' : 'Ruang
 $sheet1->setCellValue('A8', 'Per Tanggal');
 $sheet1->setCellValue('C5', ': DINAS KOMUNIKASI, INFORMATIKA DAN STATISTIK');
 $sheet1->setCellValue('C6', ': DINAS KOMUNIKASI, INFORMATIKA DAN STATISTIK');
-$sheet1->setCellValue('C7', ': ' . strtoupper($rowlokasi['nama_lokasi']));
+$sheet1->setCellValue('C7', ': ' . strtoupper($rowlokasi['bid_lokasi']));
 $sheet1->setCellValue('C8', ': ' . date('d F Y'));
 $sheet1->setCellValue('I8', 'No. Kode Lokasi');
-$sheet1->setCellValue('K8', ': ' . $rowlokasi['id_lokasi']);
+$sheet1->setCellValue('K8', ': ' . $rowlokasi['nama_lokasi']);
 
 $sheet1->mergeCells('A5:B5');
 $sheet1->mergeCells('A6:B6');
@@ -238,7 +238,7 @@ $sheet1->getStyle('I' . $totalRow . ':M' . $totalRow)->applyFromArray($dataStyle
 $sheet1->getStyle('A' . $totalRow . ':H' . $totalRow)->applyFromArray($dataStyle3);
 
 $writer = new Xls($spreadsheet);
-$nama_lokasi = $rowlokasi['nama_lokasi'] ?? 'Lokasi_Tidak_Diketahui'; 
+$bid_lokasi = $rowlokasi['bid_lokasi'] ?? 'Lokasi_Tidak_Diketahui'; 
 $date = date('Y-m-d');
 
 $sheet2 = $spreadsheet->createSheet(1);
@@ -262,9 +262,9 @@ $drawing->setCoordinates('A1');
 $drawing->setWorksheet($sheet2);
 $drawing2 = new Drawing();
 $drawing2->setName('qrcodes');
-$drawing2->setPath('qrcodes/ruang/inventaris_'.$nama_lokasi.'.png');
-$drawing2->setWidth(420);
-$drawing2->setCoordinates('E13');
+$drawing2->setPath('qrcodes/ruang/inventaris_'.$bid_lokasi.'.png');
+$drawing2->setWidth(480);
+$drawing2->setCoordinates('D10');
 $drawing2->setWorksheet($sheet2);
 
 $sheet2->setCellValue('A5', 'Sub Unit Organisasi');
@@ -273,10 +273,10 @@ $sheet2->setCellValue('A7', isset($rowlokasi['bid_lokasi']) ? 'Ruangan' : 'Ruang
 $sheet2->setCellValue('A8', 'Per Tanggal');
 $sheet2->setCellValue('C5', ': DINAS KOMUNIKASI, INFORMATIKA DAN STATISTIK');
 $sheet2->setCellValue('C6', ': DINAS KOMUNIKASI, INFORMATIKA DAN STATISTIK');
-$sheet2->setCellValue('C7', ': ' . strtoupper($rowlokasi['nama_lokasi']));
+$sheet2->setCellValue('C7', ': ' . strtoupper($rowlokasi['bid_lokasi']));
 $sheet2->setCellValue('C8', ': ' . date('d F Y'));
 $sheet2->setCellValue('I8', 'No. Kode Lokasi');
-$sheet2->setCellValue('K8', ': ' . $rowlokasi['id_lokasi']);
+$sheet2->setCellValue('K8', ': ' . $rowlokasi['nama_lokasi']);
 
 $sheet2->mergeCells('A5:B5');
 $sheet2->mergeCells('A6:B6');
@@ -289,12 +289,12 @@ $sheet2->mergeCells('C6:G6');
 $sheet2->mergeCells('C7:G7');
 $sheet2->mergeCells('C8:G8');
 
-$sheet2->getColumnDimension('B')->setWidth(16.86+0.71);
+$sheet2->getColumnDimension('B')->setWidth(10.29+0.71);
 $sheet2->getColumnDimension('G')->setWidth(18.86+0.71);
 
 // nama file dinamis
 header('Content-Type: application/vnd.ms-excel');
-header('Content-Disposition: attachment; filename="KIR_' . $nama_lokasi . '_' . $date . '.xls"');
+header('Content-Disposition: attachment; filename="KIR_' . $bid_lokasi . '_' . $date . '.xls"');
 header('Cache-Control: max-age=0');
 // Simpan dan kirim file Excel ke output
 $writer->save('php://output');
