@@ -81,9 +81,10 @@ while ($row = mysqli_fetch_assoc($result)) {
     // Ukuran font dibuat 8
     $sheet->setCellValue('A' . $rowNum, $no);
     $sheet->setCellValue('B' . $rowNum, $row['id_barang_pemda']);
+    $sheet->getStyle('B' . $rowNum)->getNumberFormat()->setFormatCode(\PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_NUMBER);
     $sheet->setCellValue('C' . $rowNum, $row['kode_barang']);
     $sheet->setCellValue('D' . $rowNum, $row['nama_barang']);
-    $sheet->setCellValue('E' . $rowNum, $row['nama_ruang_asal'] . ' ' . $row['bidang_ruang_asal'] . ' ' . $row['tempat_ruang_asal']);
+    $sheet->setCellValue('E' . $rowNum, $row['bidang_ruang_asal']);
     $sheet->setCellValue('F' . $rowNum, date('d/m/Y', strtotime($row['tgl_pembelian'])));
     $sheet->setCellValue('G' . $rowNum, "Rp " . number_format($row['harga_awal'], 2, ',', '.'));
     $sheet->setCellValue('H' . $rowNum, $row['merk']);
@@ -102,8 +103,8 @@ while ($row = mysqli_fetch_assoc($result)) {
 
 // Atur lebar kolom secara manual
 $sheet->getColumnDimension('A')->setWidth(3.71); 
-$sheet->getColumnDimension('B')->setWidth(10.42);
-$sheet->getColumnDimension('C')->setWidth(8.86 + 0.71);
+$sheet->getColumnDimension('B')->setWidth(15.57 + 0.71);
+$sheet->getColumnDimension('C')->setWidth(15 + 0.71);
 $sheet->getColumnDimension('D')->setWidth(15.29 + 0.71);
 $sheet->getColumnDimension('E')->setWidth(10.29 + 0.71);
 $sheet->getColumnDimension('F')->setWidth(8.57 + 0.71);
