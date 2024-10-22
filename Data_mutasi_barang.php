@@ -147,7 +147,7 @@ $selected_year = isset($_POST['year']) ? mysqli_real_escape_string($conn, $_POST
                     </tr>";
             }
           } else {
-            echo "<tr><td colspan='10' class='text-center'>No data available</td></tr>";
+            echo "<tr><td colspan='10' class='text-center'>Belum ada data</td></tr>";
           }
 
           mysqli_close($conn);

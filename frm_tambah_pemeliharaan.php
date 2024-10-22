@@ -1,6 +1,6 @@
 <?php
-include('koneksi/koneksi.php');
 include('component/header.php');
+include('koneksi/koneksi.php');
 
 // Tampilkan pesan error atau success jika ada
 if (isset($_SESSION['error'])) {

@@ -1,6 +1,6 @@
 <?php
 ob_start();
-session_start();
+include('component/header.php');
 include('koneksi/koneksi.php'); // Include DB connection
 
 // Check if the 'id_lokasi' is passed in the URL
@@ -25,11 +25,9 @@ if (mysqli_num_rows($result) == 1) {
 }
 ?>
 
-<?php include("component/header.php"); ?>
-
 <main id="main" class="main">
     <div class="pagetitle">
-        <h1>Edit Lokasi</h1>
+        <h1>Edit Ruangan</h1>
     </div><!-- End Page Title -->
 
     <div class="card">
@@ -37,28 +35,28 @@ if (mysqli_num_rows($result) == 1) {
 
             <form id="editLocationForm" action="proses/lokasi/edit_lokasi.php" method="POST">
                 <div class="row mb-2">
-                    <label for="id_lokasi" class="col-sm-3 col-form-label">Kode Lokasi <span style="color: red;">*</span></label>
+                    <label for="id_lokasi" class="col-sm-3 col-form-label">Kode Ruang <span style="color: red;">*</span></label>
                     <div class="col-sm-8">
                         <input type="text" name="id_lokasi" class="form-control" value="<?php echo htmlspecialchars($row['id_lokasi']); ?>" readonly>
                     </div>
                 </div>
 
                 <div class="row mb-2">
-                    <label for="nama_lokasi" class="col-sm-3 col-form-label">Nama Lokasi / Ruang <span style="color: red;">*</span> </label>
-                    <div class="col-sm-8">
-                        <input type="text" name="nama_lokasi" class="form-control" value="<?php echo htmlspecialchars($row['nama_lokasi']); ?>" required>
-                    </div>
-                </div>
-
-                <div class="row mb-2">
-                    <label for="bid_lokasi" class="col-sm-3 col-form-label">Bidang</label>
+                    <label for="bid_lokasi" class="col-sm-3 col-form-label">Nama Ruang <span style="color: red;">*</span></label>
                     <div class="col-sm-8">
                         <input type="text" name="bid_lokasi" class="form-control" value="<?php echo isset($row['bid_lokasi']) ? htmlspecialchars($row['bid_lokasi']) : ''; ?>">
                     </div>
                 </div>
 
                 <div class="row mb-2">
-                    <label for="tempat_lokasi" class="col-sm-3 col-form-label">Tempat Asal <span style="color: red;">*</span></label>
+                    <label for="nama_lokasi" class="col-sm-3 col-form-label">Kode Lokasi</label>
+                    <div class="col-sm-8">
+                        <input type="text" name="nama_lokasi" class="form-control" value="<?php echo htmlspecialchars($row['nama_lokasi']); ?>">
+                    </div>
+                </div>
+
+                <div class="row mb-2">
+                    <label for="tempat_lokasi" class="col-sm-3 col-form-label">Lokasi <span style="color: red;">*</span></label>
                     <div class="col-sm-8">
                         <input type="text" name="tempat_lokasi" class="form-control" value="<?php echo htmlspecialchars($row['tempat_lokasi']); ?>" required>
                     </div>
@@ -69,13 +67,12 @@ if (mysqli_num_rows($result) == 1) {
                     <div class="col-sm-8">
                         <select name="kategori_lokasi" class="form-select" aria-label="Default select example" required>
                             <option value="Ruangan" <?php echo ($row['kategori_lokasi'] == 'Ruangan') ? 'selected' : ''; ?>>Ruangan</option>
-                            <option value="Fasilitas Umum" <?php echo ($row['kategori_lokasi'] == 'Fasilitas Umum') ? 'selected' : ''; ?>>Fasilitas Umum</option>
                         </select>
                     </div>
                 </div>
 
                 <div class="row mb-4">
-                    <label for="desk_lokasi" class="col-sm-3 col-form-label">Deskripsi</label>
+                    <label for="desk_lokasi" class="col-sm-3 col-form-label">Keterangan</label>
                     <div class="col-sm-8">
                         <textarea name="desk_lokasi" class="form-control"><?php echo isset($row['desk_lokasi']) ? htmlspecialchars($row['desk_lokasi']) : ''; ?></textarea>
                     </div>

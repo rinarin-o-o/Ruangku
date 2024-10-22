@@ -1,5 +1,5 @@
 <?php
-session_start();
+include('component/header.php');
 include('koneksi/koneksi.php'); // Include DB connection
 
 // Get the 'id_barang_pemda' from the URL
@@ -111,8 +111,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 }
 ?>
 
-<?php include("component/header.php"); ?>
-
 <main id="main" class="main">
   <div class="pagetitle">
     <h1>Edit Barang</h1>
@@ -172,7 +170,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <div class="row mb-2">
           <label for="lokasi_asal" class="col-sm-3 col-form-label">Lokasi Asal:</label>
           <div class="col-sm-8">
-            <input type="text" id="lokasi_asal" class="form-control readonly-input" value="<?php echo $row_barang['nama_ruang_asal'] . ' - ' . $row_barang['bidang_ruang_asal'] . ' - ' . $row_barang['tempat_ruang_asal']; ?>" readonly style="background-color: #f0f0f0;">
+            <input type="text" id="lokasi_asal" class="form-control readonly-input" value="<?php echo $row_barang['id_ruang_asal'] . ' - ' . $row_barang['bidang_ruang_asal']; ?>" readonly style="background-color: #f0f0f0;">
           </div>
         </div>
 
@@ -192,7 +190,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
               <option value="">Pilih Lokasi Sekarang</option>
               <?php foreach ($locations as $location) : ?>
                 <option value="<?php echo htmlspecialchars($location['id_lokasi']); ?>" data-nama="<?php echo htmlspecialchars($location['nama_lokasi']); ?>" data-bid="<?php echo htmlspecialchars($location['bid_lokasi']); ?>" data-tempat="<?php echo htmlspecialchars($location['tempat_lokasi']); ?>" <?php echo ($location['id_lokasi'] == $row_barang['id_ruang_sekarang']) ? 'selected' : ''; ?>>
-                  <?php echo htmlspecialchars($location['nama_lokasi'] . ' - ' . $location['bid_lokasi'] . ' - ' . $location['tempat_lokasi']); ?>
+                  <?php echo htmlspecialchars($location['id_lokasi'] . ' - ' . $location['bid_lokasi']); ?>
                 </option>
               <?php endforeach; ?>
               <option value="other">Tambah lokasi Baru (Masuk ke Inventaris Lokasi)...</option>
@@ -403,10 +401,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         <!-- Masa Manfaat -->
         <div class="row mb-2">
-          <label for="masa_manfaat" class="col-sm-3 col-form-label">Masa Manfaat : <span style="color: red;">*</span></label>
+          <label for="masa_manfaat" class="col-sm-3 col-form-label">Masa Manfaat :</label>
           <div class="col-sm-8">
             <div class="input-group">
-              <input type="number" id="masa_manfaat" name="masa_manfaat" class="form-control" value="<?php echo htmlspecialchars($row_barang['masa_manfaat']); ?>" required>
+              <input type="number" id="masa_manfaat" name="masa_manfaat" class="form-control" value="<?php echo htmlspecialchars($row_barang['masa_manfaat']); ?>">
               <span class="input-group-text">Bulan</span>
             </div>
           </div>

@@ -1,5 +1,5 @@
 <?php
-session_start();
+include("component/header.php");
 include 'koneksi/koneksi.php'; // Koneksi ke database
 
 // Pagination settings
@@ -24,24 +24,24 @@ $tanggal_mulai = isset($_GET['tanggal_mulai']) ? $_GET['tanggal_mulai'] : '';
 $tanggal_akhir = isset($_GET['tanggal_akhir']) ? $_GET['tanggal_akhir'] : '';
 
 // Query untuk mendapatkan nama_lokasi berdasarkan id_lokasi
-$query_lokasi = "SELECT nama_lokasi FROM lokasi WHERE id_lokasi = ?";
+$query_lokasi = "SELECT bid_lokasi FROM lokasi WHERE id_lokasi = ?";
 $stmt_lokasi = mysqli_prepare($conn, $query_lokasi);
 mysqli_stmt_bind_param($stmt_lokasi, "s", $id_lokasi);
 mysqli_stmt_execute($stmt_lokasi);
 $result_lokasi = mysqli_stmt_get_result($stmt_lokasi);
-$nama_ruang = mysqli_fetch_assoc($result_lokasi)['nama_lokasi'] ?? '';
+$nama_ruang = mysqli_fetch_assoc($result_lokasi)['bid_lokasi'] ?? '';
 
 // Validasi input tanggal agar query berjalan dengan benar
 if (!empty($tanggal_mulai) && !empty($tanggal_akhir)) {
   $query = "SELECT b.kode_barang, b.nama_barang, b.kategori, b.merk, b.no_pabrik, b.ukuran_CC, 
-              b.bahan, b.tgl_pembelian, b.harga_total, b.kondisi_barang 
+              b.bahan, b.tgl_pembelian, b.harga_awal, b.kondisi_barang 
               FROM data_barang b
               WHERE b.id_ruang_sekarang = ? 
               AND b.tgl_pembelian BETWEEN ? AND ? $search_query
               LIMIT ?, ?";
 } else {
   $query = "SELECT b.kode_barang, b.nama_barang, b.kategori, b.merk, b.no_pabrik, b.ukuran_CC, 
-              b.bahan, b.tgl_pembelian, b.harga_total, b.kondisi_barang  
+              b.bahan, b.tgl_pembelian, b.harga_awal, b.kondisi_barang  
               FROM data_barang b
               WHERE b.id_ruang_sekarang = ? $search_query
               LIMIT ?, ?";
@@ -70,8 +70,6 @@ $count_result = mysqli_stmt_get_result($count_stmt);
 $total_records = mysqli_fetch_assoc($count_result)['total'];
 $total_pages = ceil($total_records / $limit);
 ?>
-
-<?php include("component/header.php"); ?>
 
 <main id="main" class="main">
 
@@ -141,7 +139,7 @@ $total_pages = ceil($total_records / $limit);
                   <td><?= htmlspecialchars($row['ukuran_CC'] ?? '') ?></td>
                   <td><?= htmlspecialchars($row['bahan'] ?? '') ?></td>
                   <td><?= isset($row['tgl_pembelian']) ? date('d/m/Y', strtotime($row['tgl_pembelian'])) : '-' ?></td>
-                  <td>Rp <?= isset($row['harga_total']) ? number_format($row['harga_total'], 2, ',', '.') : '0,00' ?></td>
+                  <td>Rp <?= isset($row['harga_awal']) ? number_format($row['harga_awal'], 2, ',', '.') : '0,00' ?></td>
                   <td><?= htmlspecialchars($row['kondisi_barang'] ?? '') ?></td>
                 </tr>
                 <?php $no++; // Increment the counter for the next row 

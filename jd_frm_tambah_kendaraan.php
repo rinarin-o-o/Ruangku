@@ -1,8 +1,7 @@
 <?php
 ob_start();
-session_start();
-include('koneksi/koneksi.php');
 include('component/header.php');
+include('koneksi/koneksi.php');
 
 // Buat ID Jadwal baru secara otomatis
 $query_max_id = "SELECT MAX(id_jadwal_kendaraan) AS max_id FROM jadwal_kendaraan";

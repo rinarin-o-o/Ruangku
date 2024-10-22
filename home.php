@@ -1,5 +1,5 @@
 <?php
-session_start();
+include('component/header.php');
 include('koneksi/koneksi.php'); // Include the database connection
 
 // KENDARAAN
@@ -34,7 +34,6 @@ $totalBarang = $rowBarang['total_barang'];
 ?>
 
 <body>
-<?php include('component/header.php'); ?>
 <main id="main" class="main">
 
     <div class="pagetitle">

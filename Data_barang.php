@@ -1,8 +1,5 @@
-<!--SEARCH HANYA BISA MENGAMBIL NAMA_BARANG, SEHARUSNYA SELAIN NAMA_BARANG, ID_BARANG_PEMDA, DAN JUGA KODE_BARANG HARUS DISERRTAKAN, SELAIN ITU SEARCH PADA DAFTAR BARANG RUSAK JUGA TIDAK BISA, MALAH KE REDIRECT KE DAFTAR SEMUA BARANG
-TAMBAH DATA BELUM BISA NGE REDIRECT KE PROSES TAMBAH BARANG-->
-
 <?php
-session_start();
+include("component/header.php"); 
 include('koneksi/koneksi.php'); // Include DB connection
 
 // Pagination settings
@@ -12,59 +9,49 @@ $start = ($page - 1) * $limit; // Starting record
 
 // Handle search query
 $search_query = "";
-$params = []; // Store parameters dynamically
-$types = "";  // Store types for bind_param
+$search_params = []; // Store bind parameters
+$param_types = ""; // Store bind types
 
-if (isset($_POST['query']) && !empty($_POST['query'])) {
-    $search = mysqli_real_escape_string($conn, $_POST['query']);
-    $search_query = "WHERE nama_barang LIKE ?";
-    $params[] = "%$search%";
-    $types .= "s"; // 's' for string type
+// Check if search query is set
+if (isset($_GET['query']) && !empty($_GET['query'])) {
+    $search = mysqli_real_escape_string($conn, $_GET['query']);
+    $search_query = "WHERE id_barang_pemda LIKE ? OR kode_barang LIKE ? OR nama_barang LIKE ?";
+    $search_param = "%$search%";
+
+    // Append types and parameters
+    $param_types .= "sss";
+    array_push($search_params, $search_param, $search_param, $search_param);
 }
 
-// Handle filter query
-$filter_query = "";
-if (isset($_GET['filter']) && $_GET['filter'] === 'Rusak') {
-    $filter_query = "WHERE kondisi_barang = 'Rusak'";
-}
-
-// Combine search and filter queries
-if (!empty($search_query) && !empty($filter_query)) {
-    $filter_query .= " AND " . substr($search_query, 6); // Remove 'WHERE' from search_query
-} elseif (!empty($search_query)) {
-    $filter_query = $search_query;
-}
-
-// Build the final SQL query
-$sql = "SELECT id_barang_pemda, no_regristrasi, tgl_pembelian, kode_barang, harga_awal, nama_barang, kondisi_barang, keterangan 
+// Fetch data from the data_barang table with limit and offset
+$sql = "SELECT id_barang_pemda, kondisi_barang, keterangan, harga_awal, no_regristrasi, 
+               tgl_pembelian, kode_barang, harga_total, nama_barang 
         FROM data_barang 
-        $filter_query 
+        $search_query 
         LIMIT ?, ?";
 
-// Prepare statement
+// Prepare the SQL statement
 $stmt = mysqli_prepare($conn, $sql);
-if ($stmt === false) {
-    die('Prepare failed: ' . htmlspecialchars(mysqli_error($conn)));
-}
 
-// Add pagination parameters
-$params[] = $start;
-$params[] = $limit;
-$types .= "ii"; // 'i' for integer type
+// Append pagination types and values
+$param_types .= "ii";
+array_push($search_params, $start, $limit);
 
-// Bind all parameters dynamically
-mysqli_stmt_bind_param($stmt, $types, ...$params);
+// Bind the parameters dynamically
+mysqli_stmt_bind_param($stmt, $param_types, ...$search_params);
 
-// Execute the query
 mysqli_stmt_execute($stmt);
 $result = mysqli_stmt_get_result($stmt);
 
 // Get the total number of records
-$count_sql = "SELECT COUNT(*) AS total FROM data_barang $filter_query";
+$count_sql = "SELECT COUNT(*) AS total FROM data_barang $search_query";
 $count_stmt = mysqli_prepare($conn, $count_sql);
+
+// Bind parameters for the count query
 if (!empty($search_query)) {
-    mysqli_stmt_bind_param($count_stmt, "s", $params[0]); // Bind search parameter if present
+    mysqli_stmt_bind_param($count_stmt, "sss", $search_param, $search_param, $search_param);
 }
+
 mysqli_stmt_execute($count_stmt);
 $count_result = mysqli_stmt_get_result($count_stmt);
 $total_records = mysqli_fetch_assoc($count_result)['total'];
@@ -72,10 +59,7 @@ $total_pages = ceil($total_records / $limit);
 ?>
 
 
-<?php include("component/header.php"); ?>
-
 <main id="main" class="main">
-
   <div class="pagetitle">
     <h1>Daftar Barang</h1>
     <nav>
@@ -88,8 +72,7 @@ $total_pages = ceil($total_records / $limit);
   </div>
 
   <div class="card">
-    <div class="card-body" style="padding-top: 20px;">
-
+    <div class="card-body" style="padding-top: 20px;"> 
       <ul class="nav nav-tabs" id="myTab" role="tablist">
         <li class="nav-item" role="presentation">
           <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">Daftar Semua Barang</button>
@@ -105,8 +88,8 @@ $total_pages = ceil($total_records / $limit);
               <i class="bi bi-file-earmark-excel"></i> Export
             </a>
             <div class="search-bar">
-              <form class="search-form d-flex align-items-center" method="POST" action="">
-                <input type="text" name="query" placeholder="Search" title="Enter search keyword" class="form-control me-2" value="<?= isset($_POST['query']) ? htmlspecialchars($_POST['query']) : ''; ?>">
+              <form class="search-form d-flex align-items-center" method="GET" action="">
+                <input type="text" name="query" placeholder="Search" title="Enter search keyword" class="form-control me-2" value="<?= isset($_GET['query']) ? htmlspecialchars($_GET['query']) : ''; ?>">
                 <button type="submit" title="Search" class="btn btn-outline-primary">
                   <i class="bi bi-search"></i>
                 </button>
@@ -114,7 +97,6 @@ $total_pages = ceil($total_records / $limit);
             </div><!-- End Search Bar -->
             <a href="frm_tambah_barang.php" class="btn btn-primary btn-sm" title="Tambah">+ Tambah</a>
           </div>
-
 
           <!-- Data Table -->
           <table class="table table-bordered" style="font-size: 14px;">
@@ -133,12 +115,12 @@ $total_pages = ceil($total_records / $limit);
               <?php
               if (mysqli_num_rows($result) > 0) {
                 while ($row = mysqli_fetch_assoc($result)) {
-                  $folder = "proses/inventaris/qrcodes/barang/";
+                  $folder = "proses/inventaris/qrcodes/barang";
                   // Buat kode unik QR untuk setiap barang
-                  $kode = "simabar " .
-                    "Nomor Registrasi : " . $row['no_regristrasi'] . "\n" .
-                    "Nama Barang : " . $row['nama_barang'] . "\n" .
-                    "Kondisi Barang : " . $row['kondisi_barang'] . "\n" .
+                  $kode = "simabar " . 
+                    "Nomor Registrasi : " . $row['no_regristrasi'] . "\n" . 
+                    "Nama Barang : " . $row['nama_barang'] . "\n" . 
+                    "Kondisi Barang : " . $row['kondisi_barang'] . "\n" . 
                     "Keterangan Barang : " . $row['keterangan'] . "\n";
                   $filename = $folder . "/qrcode_" . $row['id_barang_pemda'] . ".png"; // Tambahkan garis miring (/) sebelum 'kode'
 
@@ -153,7 +135,7 @@ $total_pages = ceil($total_records / $limit);
                         <img src='$filename' alt='QR Code' style='width: 70px; height: 70px;'> <!-- Tampilkan ukuran kecil -->
                         <br>
                         <a href='$filename' 
-                           download='{$row['nama_barang']}_QR_Code_{$row['no_regristrasi']}.png' 
+                           download='{$row['nama_barang']}QR_Code{$row['no_regristrasi']}.png' 
                            class='breadcrumb-item'>
                           <i class='bi bi-download'></i>
                         </a>
@@ -237,7 +219,7 @@ $total_pages = ceil($total_records / $limit);
 
               if (mysqli_num_rows($result_rusak) > 0) {
                 while ($row_rusak = mysqli_fetch_assoc($result_rusak)) {
-                  $folder = "proses/inventaris/qrcodes/barang/";
+                  $folder = "proses/inventaris/qrcodes";
                   $kode = "simabar " .
                     "Nomor Registrasi : " . $row_rusak['no_regristrasi'] . "\n" .
                     "Nama Barang : " . $row_rusak['nama_barang'] . "\n" .
@@ -254,7 +236,7 @@ $total_pages = ceil($total_records / $limit);
                       <img src='$filename' alt='QR Code' style='width: 70px; height: 70px;'>
                       <br>
                       <a href='$filename' 
-                         download='{$row_rusak['nama_barang']}_QR_Code_{$row_rusak['no_regristrasi']}.png' 
+                         download='{$row_rusak['nama_barang']}QR_Code{$row_rusak['no_regristrasi']}.png' 
                          class='breadcrumb-item'>
                         <i class='bi bi-download'></i>
                       </a>

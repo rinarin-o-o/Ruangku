@@ -1,4 +1,5 @@
-<?php include("component/header.php");
+<?php 
+include("component/header.php");
 include("koneksi/koneksi.php");
 
 $limit = 10; // Number of records per page

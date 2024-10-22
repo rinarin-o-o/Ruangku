@@ -1,7 +1,8 @@
 <?php
 ob_start();
-include('koneksi/koneksi.php');
 include('component/header.php');
+include('koneksi/koneksi.php');
+
 
 if (!isset($_GET['id_pemeliharaan'])) {
     // Redirect to the location list page if id_pemeliharaan is not set

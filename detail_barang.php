@@ -1,5 +1,5 @@
 <?php
-session_start();
+include("component/header.php");
 include('koneksi/koneksi.php');
 
 // Get the 'id_barang_pemda' from the URL
@@ -24,9 +24,19 @@ if (mysqli_num_rows($result) > 0) {
   echo "Data barang tidak ditemukan.";
   exit;
 }
-?>
 
-<?php include("component/header.php"); ?>
+// Fetch 'bidang_lokasi' for current location
+$id_ruang_sekarang = $row['id_ruang_sekarang'];
+$queryruang = "SELECT bid_lokasi FROM lokasi WHERE id_lokasi = '$id_ruang_sekarang'";
+$resultruang = mysqli_query($conn, $queryruang);
+
+if (mysqli_num_rows($resultruang) > 0) {
+  $rowruang = mysqli_fetch_assoc($resultruang);
+} else {
+  $rowruang['bidang_lokasi'] = 'Lokasi tidak ditemukan';
+}
+
+?>
 
 <main id="main" class="main">
   <div class="pagetitle">
@@ -73,7 +83,7 @@ if (mysqli_num_rows($result) > 0) {
         <div class="row mb-2">
           <label for="lokasi_asal" class="col-sm-3 col-form-label">Lokasi Asal:</label>
           <div class="col-sm-8">
-            <input type="text" id="lokasi_asal" class="form-control" value="<?php echo $row['nama_ruang_asal'] . ' - ' . $row['bidang_ruang_asal'] . ' - ' . $row['tempat_ruang_asal']; ?>" readonly>
+            <input type="text" id="lokasi_asal" class="form-control" value="<?php echo $row['id_ruang_asal'] . ' - ' . $row['bidang_ruang_asal']; ?>" readonly>
           </div>
         </div>
 
@@ -81,7 +91,7 @@ if (mysqli_num_rows($result) > 0) {
         <div class="row mb-2">
           <label for="lokasi_sekarang" class="col-sm-3 col-form-label">Lokasi Sekarang:</label>
           <div class="col-sm-8">
-            <input type="text" id="lokasi_sekarang" class="form-control" value="<?php echo $row['nama_ruang_sekarang'] . ' - ' . $row['bidang_ruang_sekarang'] . ' - ' . $row['tempat_ruang_sekarang']; ?>" readonly>
+            <input type="text" id="lokasi_sekarang" class="form-control" value="<?php echo htmlspecialchars($id_ruang_sekarang . ' - ' . $row['bidang_ruang_sekarang']); ?>" readonly>
           </div>
         </div>
 

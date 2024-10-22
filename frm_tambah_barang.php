@@ -1,8 +1,9 @@
 <?php
-session_start();
-include('koneksi/koneksi.php');
 include('component/header.php');
+include('koneksi/koneksi.php');
 
+
+// Mengambil data pemilik untuk opsi select
 $sql_pemilik = "SELECT kode_pemilik, nama_pemilik FROM pemilik";
 $result_pemilik = mysqli_query($conn, $sql_pemilik);
 $pemilikya = [];
@@ -10,8 +11,11 @@ while ($pemilik = mysqli_fetch_assoc($result_pemilik)) {
     $pemilikya[] = $pemilik;
 }
 
+// Mengambil data lokasi untuk opsi select
 $sql_locations = "SELECT * FROM lokasi";
 $locations_result = mysqli_query($conn, $sql_locations);
+
+// Menyimpan lokasi dalam array
 $locations = [];
 while ($location = mysqli_fetch_assoc($locations_result)) {
     $locations[] = $location;
@@ -52,95 +56,17 @@ while ($location = mysqli_fetch_assoc($locations_result)) {
                 <div class="row mb-2">
                     <label for="kode_pemilik" class="col-sm-3 col-form-label">Kode Pemilik <span style="color: red;">*</span></label>
                     <div class="col-sm-8">
-                        <select id="kode_pemilik" name="kode_pemilik" class="form-select" onchange="handlePemilikChange()" required>
+                        <select id="kode_pemilik" name="kode_pemilik" class="form-select" required>
                             <option value="">Pilih Kode Pemilik</option>
                             <?php foreach ($pemilikya as $pemilik) : ?>
                                 <option value="<?php echo htmlspecialchars($pemilik['kode_pemilik']); ?>">
                                     <?php echo htmlspecialchars($pemilik['kode_pemilik'] . ' - ' . $pemilik['nama_pemilik']); ?>
                                 </option>
                             <?php endforeach; ?>
-                            <option value="other">Tambah pemilik baru ...</option>
                         </select>
                     </div>
                 </div>
 
-                <!-- Modal untuk tambah pemilik baru -->
-                <div class="modal fade" id="tambahPemilikModal" tabindex="-1" aria-labelledby="tambahPemilikLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="tambahPemilikLabel">Tambah Pemilik Baru</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                <form id="tambahPemilikForm">
-                                    <div class="mb-3">
-                                        <label for="kode_pemilik_baru" class="form-label">Kode Pemilik</label>
-                                        <input type="text" class="form-control" id="kode_pemilik_baru" name="kode_pemilik_baru" required>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="nama_pemilik_baru" class="form-label">Nama Pemilik</label>
-                                        <input type="text" class="form-control" id="nama_pemilik_baru" name="nama_pemilik_baru" required>
-                                    </div>
-                                    <button type="button" class="btn btn-primary" onclick="simpanPemilikBaru()">Simpan Pemilik</button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-
-                <script>
-                    function handlePemilikChange() {
-                        var selectElement = document.getElementById('kode_pemilik');
-                        var selectedValue = selectElement.value;
-
-                        if (selectedValue === "other") {
-                            var tambahPemilikModal = new bootstrap.Modal(document.getElementById('tambahPemilikModal'), {});
-                            tambahPemilikModal.show();
-                        }
-                    }
-
-                    function simpanPemilikBaru() {
-                        // Ambil nilai dari input form
-                        var kodePemilikBaru = document.getElementById('kode_pemilik_baru').value;
-                        var namaPemilikBaru = document.getElementById('nama_pemilik_baru').value;
-
-                        // Cek jika input tidak kosong
-                        if (kodePemilikBaru && namaPemilikBaru) {
-                            // AJAX request untuk menyimpan pemilik baru ke database
-                            var xhr = new XMLHttpRequest();
-                            xhr.open("POST", "proses/barang/tambah_pemilik.php", true);
-                            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-                            xhr.onreadystatechange = function() {
-                                if (xhr.readyState === 4 && xhr.status === 200) {
-                                    var response = JSON.parse(xhr.responseText);
-                                    if (response.success) {
-                                        // Tambahkan pemilik baru ke dropdown
-                                        var selectElement = document.getElementById('kode_pemilik');
-                                        var newOption = document.createElement('option');
-                                        newOption.value = kodePemilikBaru;
-                                        newOption.textContent = kodePemilikBaru + ' - ' + namaPemilikBaru;
-                                        selectElement.appendChild(newOption);
-                                        selectElement.value = kodePemilikBaru;
-
-                                        // Tutup modal
-                                        var tambahPemilikModal = bootstrap.Modal.getInstance(document.getElementById('tambahPemilikModal'));
-                                        tambahPemilikModal.hide();
-                                    } else {
-                                        alert('Gagal menambahkan pemilik baru. Silakan coba lagi.');
-                                    }
-                                }
-                            };
-                            xhr.send("kode_pemilik_baru=" + encodeURIComponent(kodePemilikBaru) + "&nama_pemilik_baru=" + encodeURIComponent(namaPemilikBaru));
-                        } else {
-                            alert('Mohon lengkapi semua field.');
-                        }
-                    }
-                </script>
-
-
-                <!-- No. Registrasi -->
                 <div class="row mb-2">
                     <label for="no_regristrasi" class="col-sm-3 col-form-label">No. Registrasi: <span style="color: red;">*</span></label>
                     <div class="col-sm-8">
@@ -148,99 +74,45 @@ while ($location = mysqli_fetch_assoc($locations_result)) {
                     </div>
                 </div>
 
-                <!-- Select Lokasi Asal -->
+                <!-- Lokasi Sekarang -->
                 <div class="row mb-2">
-                    <label for="lokasi_asal" class="col-sm-3 col-form-label">Lokasi Asal: <span style="color: red;">*</span></label>
+                    <label for="lokasi_sekarang" class="col-sm-3 col-form-label">Ruang: <span style="color: red;">*</span></label>
                     <div class="col-sm-8">
-                        <select id="lokasi_asal" name="lokasi_asal" class="form-select" required>
-                            <option value="">Pilih Lokasi Asal</option>
+                        <select id="lokasi_sekarang" name="lokasi_sekarang" class="form-select" onchange="handleLocationChange()" required>
+                            <option value="" disabled selected>Pilih Lokasi</option>
                             <?php foreach ($locations as $location) : ?>
-                                <option value="<?php echo htmlspecialchars($location['id_lokasi']); ?>" data-nama="<?php echo htmlspecialchars($location['nama_lokasi']); ?>" data-bidang="<?php echo htmlspecialchars($location['bid_lokasi']); ?>" data-tempat="<?php echo htmlspecialchars($location['tempat_lokasi']); ?>">
-                                    <?php echo htmlspecialchars($location['nama_lokasi'] . ' - ' . $location['bid_lokasi'] . ' - ' . $location['tempat_lokasi']); ?>
+                                <option value="<?php echo htmlspecialchars($location['id_lokasi']); ?>" 
+                                        data-nama="<?php echo htmlspecialchars($location['nama_lokasi']); ?>" 
+                                        data-bidang="<?php echo htmlspecialchars($location['bid_lokasi']); ?>" 
+                                        data-tempat="<?php echo htmlspecialchars($location['tempat_lokasi']); ?>">
+                                    <?php echo htmlspecialchars($location['id_lokasi'] . ' - ' . $location['bid_lokasi']); ?>
                                 </option>
                             <?php endforeach; ?>
-                            <option value="other">Tambah lokasi Baru (Masuk ke Inventaris Lokasi)...</option>
-                        </select>
-                    </div>
-                </div>
-
-                <!-- Hidden inputs for Lokasi Asal -->
-                <input type="hidden" id="id_ruang_asal" name="id_ruang_asal">
-                <input type="hidden" id="nama_ruang_asal" name="nama_ruang_asal">
-                <input type="hidden" id="bidang_ruang_asal" name="bidang_ruang_asal">
-                <input type="hidden" id="tempat_ruang_asal" name="tempat_ruang_asal">
-
-                <script>
-                    // Fungsi untuk menangani perubahan pada dropdown lokasi
-                    function handleLocationChange() {
-                        var selectElement = document.getElementById('lokasi_asal');
-                        var selectedValue = selectElement.value;
-
-                        // Update hidden inputs jika pengguna memilih lokasi yang ada
-                        if (selectedValue !== "other" && selectedValue !== "") {
-                            var selectedOption = selectElement.options[selectElement.selectedIndex];
-                            document.getElementById('id_ruang_asal').value = selectedValue;
-                            document.getElementById('nama_ruang_asal').value = selectedOption.getAttribute('data-nama');
-                            document.getElementById('bidang_ruang_asal').value = selectedOption.getAttribute('data-bid');
-                            document.getElementById('tempat_ruang_asal').value = selectedOption.getAttribute('data-tempat');
-                        } else if (selectedValue === "other") {
-                            // Buka halaman tambah lokasi di tab baru jika memilih "Tambah Ruang/lokasi Baru"
-                            window.open("frm_tambah_lokasi.php", "_blank");
-                        } else {
-                            // Reset hidden inputs jika tidak ada lokasi yang dipilih
-                            document.getElementById('id_ruang_asal').value = "";
-                            document.getElementById('nama_ruang_asal').value = "";
-                            document.getElementById('bidang_ruang_asal').value = "";
-                            document.getElementById('tempat_ruang_asal').value = "";
-                        }
-                    }
-
-                    // Jalankan fungsi untuk mengisi hidden inputs ketika halaman dimuat
-                    window.onload = function() {
-                        handleLocationChange();
-                    };
-                </script>
-
-                <!-- Select Lokasi Sekarang -->
-                <div class="row mb-2">
-                    <label for="lokasi_sekarang" class="col-sm-3 col-form-label">Lokasi Sekarang: <span style="color: red;">*</span></label>
-                    <div class="col-sm-8">
-                        <select id="lokasi_sekarang" name="lokasi_sekarang" class="form-select" required>
-                            <option value="">Pilih Lokasi Sekarang</option>
-                            <?php foreach ($locations as $location) : ?>
-                                <option value="<?php echo htmlspecialchars($location['id_lokasi']); ?>" data-nama="<?php echo htmlspecialchars($location['nama_lokasi']); ?>" data-bidang="<?php echo htmlspecialchars($location['bid_lokasi']); ?>" data-tempat="<?php echo htmlspecialchars($location['tempat_lokasi']); ?>">
-                                    <?php echo htmlspecialchars($location['nama_lokasi'] . ' - ' . $location['bid_lokasi'] . ' - ' . $location['tempat_lokasi']); ?>
-                                </option>
-                            <?php endforeach; ?>
-                            <option value="other">Tambah lokasi Baru (Masuk ke Inventaris Lokasi)...</option>
+                            <option value="other">Tambah Lokasi Baru</option>
                         </select>
                     </div>
                 </div>
 
                 <!-- Hidden inputs untuk menyimpan data lokasi sekarang -->
-                <input type="hidden" id="id_ruang_sekarang" name="id_ruang_sekarang" value="<?php echo htmlspecialchars($row_barang['id_ruang_sekarang']); ?>">
-                <input type="hidden" id="nama_ruang_sekarang" name="nama_ruang_sekarang" value="<?php echo htmlspecialchars($row_barang['nama_ruang_sekarang']); ?>">
-                <input type="hidden" id="bidang_ruang_sekarang" name="bidang_ruang_sekarang" value="<?php echo htmlspecialchars($row_barang['bidang_ruang_sekarang']); ?>">
-                <input type="hidden" id="tempat_ruang_sekarang" name="tempat_ruang_sekarang" value="<?php echo htmlspecialchars($row_barang['tempat_ruang_sekarang']); ?>">
+                <input type="hidden" id="id_ruang_sekarang" name="id_ruang_sekarang">
+                <input type="hidden" id="nama_ruang_sekarang" name="nama_ruang_sekarang">
+                <input type="hidden" id="bidang_ruang_sekarang" name="bidang_ruang_sekarang">
+                <input type="hidden" id="tempat_ruang_sekarang" name="tempat_ruang_sekarang">
 
                 <script>
-                    // Fungsi untuk menangani perubahan pada dropdown lokasi
                     function handleLocationChange() {
                         var selectElement = document.getElementById('lokasi_sekarang');
                         var selectedValue = selectElement.value;
 
-                        // Update hidden inputs jika pengguna memilih lokasi yang ada
                         if (selectedValue !== "other" && selectedValue !== "") {
                             var selectedOption = selectElement.options[selectElement.selectedIndex];
                             document.getElementById('id_ruang_sekarang').value = selectedValue;
                             document.getElementById('nama_ruang_sekarang').value = selectedOption.getAttribute('data-nama');
-                            document.getElementById('bidang_ruang_sekarang').value = selectedOption.getAttribute('data-bid');
+                            document.getElementById('bidang_ruang_sekarang').value = selectedOption.getAttribute('data-bidang');
                             document.getElementById('tempat_ruang_sekarang').value = selectedOption.getAttribute('data-tempat');
                         } else if (selectedValue === "other") {
-                            // Buka halaman tambah lokasi di tab baru jika memilih "Tambah Ruang/lokasi Baru"
                             window.open("frm_tambah_lokasi.php", "_blank");
                         } else {
-                            // Reset hidden inputs jika tidak ada lokasi yang dipilih
                             document.getElementById('id_ruang_sekarang').value = "";
                             document.getElementById('nama_ruang_sekarang').value = "";
                             document.getElementById('bidang_ruang_sekarang').value = "";
@@ -248,7 +120,6 @@ while ($location = mysqli_fetch_assoc($locations_result)) {
                         }
                     }
 
-                    // Jalankan fungsi untuk mengisi hidden inputs ketika halaman dimuat
                     window.onload = function() {
                         handleLocationChange();
                     };
@@ -258,62 +129,15 @@ while ($location = mysqli_fetch_assoc($locations_result)) {
                 <div class="row mb-2">
                     <label for="kategori" class="col-sm-3 col-form-label">Kategori: <span style="color: red;">*</span></label>
                     <div class="col-sm-8">
-                        <select id="kategori" name="kategori" class="form-select" onchange="handleCategoryChange()">
+                        <select id="kategori" name="kategori" class="form-select">
                             <option value="" disabled selected>Pilih Kategori</option>
                             <option value="kendaraan">Kendaraan</option>
                             <option value="peralatan">Peralatan</option>
                             <option value="mesin">Mesin</option>
                             <option value="elektronik">Elektronik</option>
-                            <option value="other">Tambah Kategori Baru...</option>
                         </select>
                     </div>
                 </div>
-
-                <!-- Modal untuk kategori baru -->
-                <div class="modal fade" id="kategoriBaruModal" tabindex="-1" aria-labelledby="kategoriBaruModalLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="kategoriBaruModalLabel">Tambah Kategori Baru</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                <input type="text" id="kategori_baru_input" class="form-control" placeholder="Masukkan kategori baru">
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                                <button type="button" class="btn btn-primary" onclick="saveCategory()">OK</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <script>
-                    // Fungsi untuk menampilkan pop-up kategori baru
-                    function handleCategoryChange() {
-                        var selectElement = document.getElementById('kategori');
-                        if (selectElement.value === "other") {
-                            var kategoriModal = new bootstrap.Modal(document.getElementById('kategoriBaruModal'));
-                            kategoriModal.show();
-                        }
-                    }
-
-                    // Fungsi untuk menyimpan kategori baru dan menambahkannya ke select input
-                    function saveCategory() {
-                        var kategoriBaru = document.getElementById('kategori_baru_input').value.trim();
-                        if (kategoriBaru) {
-                            var selectElement = document.getElementById('kategori');
-                            selectElement.options[selectElement.options.length - 1] = new Option(kategoriBaru, kategoriBaru.toLowerCase().replace(/\s+/g, '_')); // Ganti option "Tambah Kategori Baru..."
-                            selectElement.value = kategoriBaru.toLowerCase().replace(/\s+/g, '_'); // Set value select ke kategori baru
-
-                            // Tambahkan kembali opsi "Tambah Kategori Baru..."
-                            selectElement.options[selectElement.options.length] = new Option("Tambah Kategori Baru...", "other");
-
-                            var kategoriModal = bootstrap.Modal.getInstance(document.getElementById('kategoriBaruModal'));
-                            kategoriModal.hide(); // Sembunyikan modal
-                        }
-                    }
-                </script>
 
                 <div class="row mb-2">
                     <label for="merk" class="col-sm-3 col-form-label">Merk</label>
@@ -407,10 +231,10 @@ while ($location = mysqli_fetch_assoc($locations_result)) {
 
                 <!-- Masa Manfaat -->
                 <div class="row mb-2">
-                    <label for="masa_manfaat" class="col-sm-3 col-form-label">Masa Manfaat : <span style="color: red;">*</span></label>
+                    <label for="masa_manfaat" class="col-sm-3 col-form-label">Masa Manfaat : </label>
                     <div class="col-sm-8">
                         <div class="input-group">
-                            <input type="number" id="masa_manfaat" name="masa_manfaat" class="form-control" id="masa_manfaat" required>
+                            <input type="number" id="masa_manfaat" name="masa_manfaat" class="form-control" id="masa_manfaat">
                             <span class="input-group-text">Bulan</span>
                         </div>
                     </div>
@@ -422,9 +246,9 @@ while ($location = mysqli_fetch_assoc($locations_result)) {
                     <div class="col-sm-8">
                         <select name="kondisi_barang" class="form-select" id="kondisi_barang" required>
                             <option value="" disabled selected>Pilih Kondisi</option>
-                            <option value="baik">Baik</option>
-                            <option value="kurang_baik">Kurang Baik</option>
-                            <option value="rusak">Rusak</option>
+                            <option value="Baik">Baik</option>
+                            <option value="Kurang Baik">Kurang Baik</option>
+                            <option value="Rusak">Rusak</option>
                         </select>
                     </div>
                 </div>

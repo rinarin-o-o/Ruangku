@@ -1,8 +1,7 @@
 <?php
 ob_start();
-session_start();
-include('koneksi/koneksi.php');
 include('component/header.php');
+include('koneksi/koneksi.php');
 ?>
 
 <main id="main" class="main">
@@ -16,32 +15,33 @@ include('component/header.php');
       <form id="addLocationForm" method="POST" action="">
 
         <div class="row mb-2">
-          <label for="id_lokasi" class="col-sm-3 col-form-label">Kode Lokasi <span style="color: red;">*</span></label>
+          <label for="nama_lokasi" class="col-sm-3 col-form-label">Kode Lokasi</label>
+          <div class="col-sm-8">
+            <input type="text" name="nama_lokasi" class="form-control" nama="id_lokasi">
+          </div>
+        </div>
+
+        <div class="row mb-2">
+          <label for="tempat_lokasi" class="col-sm-3 col-form-label">Nama Lokasi <span style="color: red;">*</span></label>
+          <div class="col-sm-8">
+            <input type="text" name="tempat_lokasi" class="form-control" id="tempat_lokasi" required>
+          </div>
+        </div>
+
+        <div class="row mb-2">
+          <label for="id_lokasi" class="col-sm-3 col-form-label">Kode Ruang <span style="color: red;">*</span></label>
           <div class="col-sm-8">
             <input type="text" name="id_lokasi" class="form-control" id="id_lokasi" required>
           </div>
         </div>
 
         <div class="row mb-2">
-          <label for="nama_lokasi" class="col-sm-3 col-form-label">Nama Lokasi <span style="color: red;">*</span></label>
+          <label for="bid_lokasi" class="col-sm-3 col-form-label">Nama Ruang <span style="color: red;">*</span></label>
           <div class="col-sm-8">
-            <input type="text" name="nama_lokasi" class="form-control" id="nama_lokasi" required>
+            <input type="text" name="bid_lokasi" class="form-control" id="bid_lokasi" required>
           </div>
         </div>
 
-        <div class="row mb-2">
-          <label for="bid_lokasi" class="col-sm-3 col-form-label">Bidang Lokasi</label>
-          <div class="col-sm-8">
-            <input type="text" name="bid_lokasi" class="form-control" id="bid_lokasi">
-          </div>
-        </div>
-
-        <div class="row mb-2">
-          <label for="tempat_lokasi" class="col-sm-3 col-form-label">Tempat Asal <span style="color: red;">*</span></label>
-          <div class="col-sm-8">
-            <input type="text" name="tempat_lokasi" class="form-control" id="tempat_lokasi" required>
-          </div>
-        </div>
 
         <div class="row mb-2">
           <label for="kategori_lokasi" class="col-sm-3 col-form-label">Kategori <span style="color: red;">*</span></label>
@@ -49,13 +49,12 @@ include('component/header.php');
             <select name="kategori_lokasi" class="form-select" aria-label="Default select example" id="kategori_lokasi" required>
               <option value="" disabled selected>Pilih Kategori</option>
               <option value="ruangan">Ruangan</option>
-              <option value="fasilitas_umum">Fasilitas Umum</option>
             </select>
           </div>
         </div>
 
         <div class="row mb-4">
-          <label for="desk_lokasi" class="col-sm-3 col-form-label">Deskripsi Lokasi</label>
+          <label for="desk_lokasi" class="col-sm-3 col-form-label">Keterangan</label>
           <div class="col-sm-8">
             <textarea name="desk_lokasi" class="form-control" id="desk_lokasi" rows="3"></textarea>
           </div>

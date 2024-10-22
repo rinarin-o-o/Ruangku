@@ -1,6 +1,6 @@
 <?php
 ob_start();
-session_start();
+include("component/header.php");
 include('koneksi/koneksi.php'); // Include DB connection
 
 // Check if the 'id_jadwal_kendaraan' is passed in the URL
@@ -24,8 +24,6 @@ if (mysqli_num_rows($result) == 1) {
     exit;
 }
 ?>
-
-<?php include("component/header.php"); ?>
 
 <main id="main" class="main">
     <div class="pagetitle">

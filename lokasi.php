@@ -1,5 +1,5 @@
 <?php
-session_start();
+include("component/header.php");
 include('koneksi/koneksi.php'); // Include DB connection
 
 // Handle search query if provided
@@ -18,16 +18,14 @@ $total_rows = $row_count['total'];
 $total_pages = ceil($total_rows / $rows_per_page);
 
 // Fetch location data from the database with pagination
-$sql = "SELECT * FROM lokasi WHERE nama_lokasi LIKE '%$query%' OR id_lokasi LIKE '%$query%' LIMIT $offset, $rows_per_page";
+$sql = "SELECT * FROM lokasi WHERE tempat_lokasi LIKE '%$query%' OR id_lokasi LIKE '%$query%' OR nama_lokasi LIKE '%$query%' OR bid_lokasi LIKE '%$query%' LIMIT $offset, $rows_per_page";
 $result = mysqli_query($conn, $sql);
 ?>
-
-<?php include("component/header.php"); ?>
 
 <main id="main" class="main">
 
   <div class="pagetitle">
-    <h1>Daftar Lokasi</h1>
+    <h1>Daftar Ruangan</h1>
     <nav>
       <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="index.html">Home</a></li>
@@ -54,10 +52,10 @@ $result = mysqli_query($conn, $sql);
         <thead class="table-secondary text-center">
           <tr>
             <th scope="col" style="width: 5%;">No</th>
-            <th scope="col" style="width: 10%;">Kode Lokasi</th>
-            <th scope="col" style="width: 20%;">Nama Lokasi</th>
-            <th scope="col" style="width: 15%;">Bidang</th>
-            <th scope="col" style="width: 20%;">Tempat Asal</th>
+            <th scope="col" style="width: 10%;">Kode Ruang</th>
+            <th scope="col" style="width: 20%;">Nama Ruang</th>
+            <th scope="col" style="width: 15%;">Kode Lokasi</th>
+            <th scope="col" style="width: 20%;">Lokasi</th>
             <th scope="col" style="width: 20%;">Deskripsi</th>
             <th scope="col" style="width: 10%;">Aksi</th>
           </tr>
@@ -69,8 +67,8 @@ $result = mysqli_query($conn, $sql);
             echo "<tr class='text-center'>";
             echo "<th scope='row'>{$no}</th>";
             echo "<td>{$row['id_lokasi']}</td>";
-            echo "<td>{$row['nama_lokasi']}</td>";
             echo "<td>{$row['bid_lokasi']}</td>";
+            echo "<td>{$row['nama_lokasi']}</td>";
             echo "<td>{$row['tempat_lokasi']}</td>";
             echo "<td>{$row['desk_lokasi']}</td>";
             echo "<td>

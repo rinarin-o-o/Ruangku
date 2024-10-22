@@ -1,9 +1,8 @@
 <!--kyaknya gk ada yang salah, tapi gk bisa ngeproses hasil edit/update-annya-->
 <?php
 ob_start();
-session_start();
-include('koneksi/koneksi.php');
 include('component/header.php');
+include('koneksi/koneksi.php');
 
 $id_mutasi = $_GET['id_mutasi'];
 

@@ -76,7 +76,7 @@
                     </tr>";
           }
       } else {
-          echo "<tr><td colspan='9' class='text-center'>Tidak ada data yang cocok</td></tr>";
+          echo "<tr><td colspan='9' class='text-center'>Belum ada data</td></tr>";
       }
       ?>
     </tbody>
