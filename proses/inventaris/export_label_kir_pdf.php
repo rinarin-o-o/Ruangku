@@ -1,5 +1,5 @@
 <?php
-ob_start(); // Mulai buffer output
+ob_start();
 session_start();
 include('../../koneksi/koneksi.php');
 
@@ -24,7 +24,7 @@ $result_barang = mysqli_query($conn, $sql_barang);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Label Barang <?php echo $rowlokasi['nama_lokasi']; ?></title>
+    <title>Label Barang <?php echo $rowlokasi['bid_lokasi']; ?></title>
     <style>
         @page {
             size: A4;
@@ -32,14 +32,10 @@ $result_barang = mysqli_query($conn, $sql_barang);
         }
 
         body {
-            margin: 0;
-            padding: 0;
             font-family: 'Times New Roman', serif;
-            /* Ganti menjadi Times New Roman */
             font-size: 12px;
             background-color: #f2f2f2;
         }
-
 
         .card {
             width: 100%;
@@ -50,35 +46,28 @@ $result_barang = mysqli_query($conn, $sql_barang);
 
         .column {
             width: 48%;
-            /* Membuat dua kolom */
             margin-bottom: 10px;
             box-sizing: border-box;
         }
 
         table {
             border: 1px solid black;
-            border-collapse: separate;
             width: 100%;
             margin-bottom: 10px;
         }
 
-        th,
-        td {
+        th, td {
             border: 0.3 solid black;
             padding: 2px;
             text-align: center;
         }
 
-        th {
-            background-color: #f0f0f0;
-            font-weight: bold;
-        }
-
         .qrcode {
-            width: 95px;
-            height: 95px;
-            object-fit: contain;
-        }
+            padding:0px;
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+    }
 
         .brebes-img img {
             width: 40px;
@@ -95,7 +84,9 @@ $result_barang = mysqli_query($conn, $sql_barang);
 <body>
     <div class="card">
         <?php
-        $count = 0;
+        require_once('../qrcode/qrlib.php');
+        $folder = "qrcodes/barang";
+
         while ($row = mysqli_fetch_assoc($result_barang)) {
             $id_barang_pemda = $row['id_barang_pemda'];
             $kode_barang = $row['kode_barang'];
@@ -103,10 +94,15 @@ $result_barang = mysqli_query($conn, $sql_barang);
             $tgl_pembelian = $row['tgl_pembelian'];
             $nama_barang = $row['nama_barang'];
             $merk = $row['merk'];
+            
+            $filename = "$folder/qrcode_" . $id_barang_pemda . "_" . $no_regristrasi . ".png";
+            if (!file_exists($filename)) {
+                QRcode::png($id_barang_pemda, $filename, "M", 12, 2);
+            }
         ?>
             <div class="column">
                 <table>
-                    <colgroup>
+                <colgroup>
                         <col style="width: 25px;">
                         <col style="width: 250px;">
                         <col style="width: 10px;">
@@ -120,8 +116,8 @@ $result_barang = mysqli_query($conn, $sql_barang);
                                 <span style="font-size: 10px; margin-top: 5px; display: inline-block;"><?php echo date('Y'); ?></span>
                             </td>
                             <td colspan="2" class="kode-barang" style="padding-bottom:3px"><?php echo $id_barang_pemda; ?></td>
-                            <td rowspan="4" style="vertical-align: middle;">
-                                <img src="qrcodes/barang/qrcode_<?php echo $id_barang_pemda; ?>.png" alt="QR Code" class="qrcode">
+                            <td rowspan="4" style="vertical-align: middle; width: 90px; height: 90px;">
+                                <img src="<?php echo $filename; ?>" alt="QR Code" class="qrcode">
                             </td>
                         </tr>
                         <tr>
@@ -132,17 +128,13 @@ $result_barang = mysqli_query($conn, $sql_barang);
                         </tr>
                         <tr>
                             <td style="text-align: left; font-size: 11.5px; padding-left: 5px"><?php echo $tgl_pembelian; ?></td>
-                            <td style="text-align: right;font-size: 11.5px;"><?php echo $no_regristrasi; ?></td>
+                            <td style="font-size: 11.5px;"><?php echo $no_regristrasi; ?></td>
                         </tr>
                     </tbody>
                 </table>
             </div>
-        <?php
-            $count++;
-        }
-        ?>
+        <?php } ?>
     </div>
-
 </body>
 
 </html>
@@ -160,14 +152,14 @@ $date = date('Y-m-d');
 
 try {
     header('Content-Type: application/pdf');
-    header('Content-Disposition: attachment; filename="label_barang_'.$rowlokasi['nama_lokasi'].'_'.$date.'.pdf"'); // Attachment untuk otomatis download
+    header('Content-Disposition: attachment; filename="label_barang_' . $rowlokasi['bid_lokasi'] . '_' . $date . '.pdf"'); // Attachment untuk otomatis download
 
     $html2pdf = new Html2Pdf();
     $html2pdf->pdf->SetDisplayMode('fullpage');
     $html2pdf->writeHTML($content);
-    
+
     // Gunakan 'D' agar file otomatis ter-download
-    $html2pdf->output('label_barang_'.$rowlokasi['nama_lokasi'].'_'.$date.'.pdf', 'D'); 
+    $html2pdf->output('label_barang_' . $rowlokasi['bid_lokasi'] . '_' . $date . '.pdf', 'D');
 } catch (Html2PdfException $e) {
     echo ExceptionFormatter::getHtmlMessage($e);
 }
