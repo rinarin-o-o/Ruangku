@@ -165,6 +165,12 @@ if (mysqli_num_rows($resultruang) > 0) {
                 <div class="input-group">
                   <span class="input-group-text">Rp</span>
                   <input type="text" id="harga_total" class="form-control" value="<?php echo number_format($row['harga_total'], 2, ',', '.'); ?>" readonly>
+                  </form>
+
+
+    <a href="frm_tambah_pemeliharaan.php?id_barang=<?php echo $row['id_barang_pemda']; ?>" class="btn btn-primary">Tambah Pemeliharaan</a>
+
+                
                 </div>
               </div>
 
