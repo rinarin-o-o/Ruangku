@@ -18,10 +18,7 @@
     <form class="search-form d-flex align-items-center" method="POST" action="#">
       <input type="text" name="query" placeholder="Search" title="Enter search keyword" class="form-control me-2">
       <button type="submit" title="Search" class="btn btn-outline-primary"><i class="bi bi-search"></i></button>
-    </form>
-    <a href="frm_tambah_pemeliharaan.php" class="btn btn-primary">
-      <i class="bi bi-plus"></i> Tambah Data
-    </a>
+
   </div><!-- End Search Bar and Add Button -->
 
   <!-- Data Table -->
