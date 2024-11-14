@@ -19,7 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $bidang_ruang_sekarang = $_POST['bidang_ruang_sekarang'];
     $tempat_ruang_sekarang = $_POST['tempat_ruang_sekarang'];
     $tgl_pembelian = $_POST['tgl_pembelian'];
-    $tgl_pembukuan = $_POST['tgl_pembukuan'];
+    $tgl_pembukuan = $_POST['tgl_pembelian'];
     $merk = $_POST['merk'];
     $type = $_POST['type'];
     $ukuran_CC = $_POST['ukuran_CC'];

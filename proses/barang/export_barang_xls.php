@@ -23,8 +23,8 @@ $spreadsheet->getDefaultStyle()->getFont()->setName('Times New Roman');
 // Tambahkan header logo dan judul di baris pertama
 $sheet->setCellValue('D1', 'DINAS KOMUNIKASI INFORMATIKA DAN STATISTIK');
 $sheet->setCellValue('D2', 'KABUPATEN BREBES');
-$sheet->setCellValue('D3', 'LAPORAN ASET/BARANG');
-
+$sheet->setCellValue('D3', 'DAFTAR ASET/BARANG');
+$sheet->mergeCells('A1:B3');
 // Menggabungkan beberapa sel untuk judul
 $sheet->mergeCells('D1:N1');
 $sheet->mergeCells('D2:N2');
@@ -46,11 +46,11 @@ $drawing->setCoordinates('A1'); // Gambar akan dimulai dari sel A1
 $drawing->setWorksheet($sheet); // Tambahkan gambar ke sheet
 
 // Tambahkan tanggal cetak di A5
-$sheet->setCellValue('A5', 'Tanggal Cetak: ' . date('d-m-Y'));
+$sheet->setCellValue('A5', 'Per tanggal: ' . date('d F Y'));
 
 // Atur header untuk kolom tabel
 $headers = [
-    'No', 'ID Barang Pemda', 'Kode Barang', 'Nama Barang', 'Lokasi Asal',
+    'No', 'ID Pemda', 'Kode Aset', 'Nama Aset', 'Ruang Asal', 'Ruang Sekarang',
     'Tanggal Pembelian', 'Harga Beli', 'Merk', 'Type', 'Kategori', 'Ukuran CC',
     'No. Pabrik', 'No. Rangka', 'No. BPKB', 'Bahan', 'No. Mesin', 'No. Polisi'
 ];
@@ -68,13 +68,11 @@ $headerStyle = [
         'startColor' => ['rgb' => 'D9E1F2']
     ]
 ];
-$sheet->getStyle('A7:Q7')->applyFromArray($headerStyle);
+$sheet->getStyle('A7:R7')->applyFromArray($headerStyle);
 
-// Query untuk mengambil semua kolom dari tabel data_barang
 $sql = "SELECT * FROM data_barang";
 $result = mysqli_query($conn, $sql);
 
-// Mulai memasukkan data hasil query dari baris ke-8
 $rowNum = 8; // Baris mulai data
 $no = 1; // Inisialisasi nomor urut
 while ($row = mysqli_fetch_assoc($result)) {
@@ -84,19 +82,20 @@ while ($row = mysqli_fetch_assoc($result)) {
     $sheet->getStyle('B' . $rowNum)->getNumberFormat()->setFormatCode(\PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_NUMBER);
     $sheet->setCellValue('C' . $rowNum, $row['kode_barang']);
     $sheet->setCellValue('D' . $rowNum, $row['nama_barang']);
-    $sheet->setCellValue('E' . $rowNum, $row['bidang_ruang_asal']);
-    $sheet->setCellValue('F' . $rowNum, date('d/m/Y', strtotime($row['tgl_pembelian'])));
-    $sheet->setCellValue('G' . $rowNum, "Rp " . number_format($row['harga_awal'], 2, ',', '.'));
-    $sheet->setCellValue('H' . $rowNum, $row['merk']);
-    $sheet->setCellValue('I' . $rowNum, $row['type']);
-    $sheet->setCellValue('J' . $rowNum, $row['kategori']);
-    $sheet->setCellValue('K' . $rowNum, $row['ukuran_CC']);
-    $sheet->setCellValue('L' . $rowNum, $row['no_pabrik']);
-    $sheet->setCellValue('M' . $rowNum, $row['no_rangka']);
-    $sheet->setCellValue('N' . $rowNum, $row['no_bpkb']);
-    $sheet->setCellValue('O' . $rowNum, $row['bahan']);
-    $sheet->setCellValue('P' . $rowNum, $row['no_mesin']);
-    $sheet->setCellValue('Q' . $rowNum, $row['no_polisi']);
+    $sheet->setCellValue('E' . $rowNum, $row['id_ruang_asal'].' - '.$row['bidang_ruang_asal']);
+    $sheet->setCellValue('F' . $rowNum, $row['id_ruang_sekarang'].' - '.$row['bidang_ruang_sekarang']);
+    $sheet->setCellValue('G' . $rowNum, date('d/m/Y', strtotime($row['tgl_pembelian'])));
+    $sheet->setCellValue('H' . $rowNum, "Rp " . number_format($row['harga_awal'], 2, ',', '.'));
+    $sheet->setCellValue('I' . $rowNum, $row['merk']);
+    $sheet->setCellValue('J' . $rowNum, $row['type']);
+    $sheet->setCellValue('K' . $rowNum, $row['kategori']);
+    $sheet->setCellValue('L' . $rowNum, $row['ukuran_CC']);
+    $sheet->setCellValue('M' . $rowNum, $row['no_pabrik']);
+    $sheet->setCellValue('N' . $rowNum, $row['no_rangka']);
+    $sheet->setCellValue('O' . $rowNum, $row['no_bpkb']);
+    $sheet->setCellValue('P' . $rowNum, $row['bahan']);
+    $sheet->setCellValue('Q' . $rowNum, $row['no_mesin']);
+    $sheet->setCellValue('R' . $rowNum, $row['no_polisi']);
     $rowNum++;
     $no++;
 }
@@ -107,18 +106,19 @@ $sheet->getColumnDimension('B')->setWidth(15.57 + 0.71);
 $sheet->getColumnDimension('C')->setWidth(15 + 0.71);
 $sheet->getColumnDimension('D')->setWidth(15.29 + 0.71);
 $sheet->getColumnDimension('E')->setWidth(10.29 + 0.71);
-$sheet->getColumnDimension('F')->setWidth(8.57 + 0.71);
-$sheet->getColumnDimension('G')->setWidth(10 + 0.71);
-$sheet->getColumnDimension('H')->setWidth(8.29 + 0.71);
-$sheet->getColumnDimension('I')->setWidth(4.86 + 0.71);
-$sheet->getColumnDimension('J')->setWidth(7 + 0.71);
-$sheet->getColumnDimension('K')->setWidth(6.57 + 0.71);
-$sheet->getColumnDimension('L')->setWidth(5.71 + 0.71);
-$sheet->getColumnDimension('M')->setWidth(6.29 + 0.71);
+$sheet->getColumnDimension('F')->setWidth(10.29 + 0.71);
+$sheet->getColumnDimension('G')->setWidth(8.57 + 0.71);
+$sheet->getColumnDimension('H')->setWidth(10 + 0.71);
+$sheet->getColumnDimension('I')->setWidth(8.29 + 0.71);
+$sheet->getColumnDimension('J')->setWidth(4.86 + 0.71);
+$sheet->getColumnDimension('K')->setWidth(7 + 0.71);
+$sheet->getColumnDimension('L')->setWidth(6.57 + 0.71);
+$sheet->getColumnDimension('M')->setWidth(5.71 + 0.71);
 $sheet->getColumnDimension('N')->setWidth(6.29 + 0.71);
-$sheet->getColumnDimension('O')->setWidth(5.86 + 0.71);
-$sheet->getColumnDimension('P')->setWidth(6.29 + 0.71);
-$sheet->getColumnDimension('Q')->setWidth(7 + 0.71);
+$sheet->getColumnDimension('O')->setWidth(6.29 + 0.71);
+$sheet->getColumnDimension('P')->setWidth(5.86 + 0.71);
+$sheet->getColumnDimension('Q')->setWidth(6.29 + 0.71);
+$sheet->getColumnDimension('R')->setWidth(7 + 0.71);
 
 // Beri warna fill untuk header, alignment center, border untuk tabel, dan wrap text
 $headerStyle = [
@@ -136,7 +136,7 @@ $headerStyle = [
         'startColor' => ['rgb' => 'D9E1F2']
     ]
 ];
-$sheet->getStyle('A7:Q7')->applyFromArray($headerStyle);
+$sheet->getStyle('A7:R7')->applyFromArray($headerStyle);
 
 // Buat border untuk semua data, alignment center, wrap text, dan ukuran font 8
 $dataStyle = [
@@ -150,7 +150,7 @@ $dataStyle = [
         'allBorders' => ['borderStyle' => Border::BORDER_THIN]
     ]
 ];
-$sheet->getStyle('A8:Q' . ($rowNum - 1))->applyFromArray($dataStyle);
+$sheet->getStyle('A8:R' . ($rowNum - 1))->applyFromArray($dataStyle);
 
 // Simpan file Excel dan kirimkan ke browser untuk diunduh
 $writer = new Xls($spreadsheet);

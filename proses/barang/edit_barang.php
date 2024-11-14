@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $tempat_ruang_asal = mysqli_real_escape_string($conn, $_POST['tempat_ruang_asal']);
     $id_ruang_sekarang = mysqli_real_escape_string($conn, $_POST['id_ruang_sekarang']);
     $nama_ruang_sekarang = mysqli_real_escape_string($conn, $_POST['nama_ruang_sekarang']);
-    $bidang_ruang_sekarang = isset($_POST['bidang_ruang_sekarang']) ? mysqli_real_escape_string($conn, $_POST['bidang_ruang_sekarang']) : '';
+    $bidang_ruang_sekarang = isset($_POST['bid_ruang_sekarang']) ? mysqli_real_escape_string($conn, $_POST['bid_ruang_sekarang']) : '';
     $tempat_ruang_sekarang = mysqli_real_escape_string($conn, $_POST['tempat_ruang_sekarang']);
     $tgl_pembelian = mysqli_real_escape_string($conn, $_POST['tgl_pembelian']);
     $tgl_pembukuan = mysqli_real_escape_string($conn, $_POST['tgl_pembukuan']);
@@ -25,6 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $ukuran_CC = mysqli_real_escape_string($conn, $_POST['ukuran_CC']);
     $no_pabrik = mysqli_real_escape_string($conn, $_POST['no_pabrik']);
     $no_rangka = mysqli_real_escape_string($conn, $_POST['no_rangka']);
+    $kategori = mysqli_real_escape_string($conn, $_POST['kategori']);
     $no_bpkb = mysqli_real_escape_string($conn, $_POST['no_bpkb']);
     $bahan = mysqli_real_escape_string($conn, $_POST['bahan']);
     $no_mesin = mysqli_real_escape_string($conn, $_POST['no_mesin']);
@@ -107,6 +108,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                    no_pabrik = '$no_pabrik',
                    no_rangka = '$no_rangka',
                    no_bpkb = '$no_bpkb',
+                   kategori = '$kategori',
                    bahan = '$bahan',
                    no_mesin = '$no_mesin',
                    no_polisi = '$no_polisi',
@@ -129,8 +131,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if ($ruang_sekarang_sebelum !== $id_ruang_sekarang) {
             // Menambahkan data mutasi
             $tgl_mutasi = date('Y-m-d H:i:s'); // Waktu saat ini
-            $penanggung_jawab = "-"; // Placeholder
-            $keterangan_mutasi = "-"; // Placeholder
+            $penanggung_jawab = ""; // Placeholder
+            $keterangan_mutasi = ""; // Placeholder
             $jenis_mutasi = ""; // Placeholder
 
             // Membuat ID mutasi baru secara otomatis
@@ -141,16 +143,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $number = $last_id ? (int)substr($last_id, 3) + 1 : 1; // Increment ID mutasi
             $new_id_mutasi = 'MTS' . str_pad($number, 7, '0', STR_PAD_LEFT); // Format ID
 
-            $sql_ruang_asal = "SELECT nama_lokasi, bid_lokasi, tempat_lokasi FROM lokasi WHERE id_lokasi = '$ruang_sekarang_sebelum'";
+            $sql_ruang_asal = "SELECT * FROM lokasi WHERE id_lokasi = '$ruang_sekarang_sebelum'";
             $result_ruang_asal = mysqli_query($conn, $sql_ruang_asal);
             $row_ruang_asal = mysqli_fetch_assoc($result_ruang_asal);
-            $ruang_asal_nama = $row_ruang_asal['nama_lokasi'] . ' - ' . $row_ruang_asal['bid_lokasi'] . ' - ' . $row_ruang_asal['tempat_lokasi'];
+            $ruang_asal_nama = $row_ruang_asal['id_lokasi'] . ' - ' . $row_ruang_asal['bid_lokasi'] . ' - ' . $row_ruang_asal['tempat_lokasi'];
 
             // Ambil informasi ruang sekarang
-            $sql_ruang_sekarang = "SELECT nama_lokasi, bid_lokasi, tempat_lokasi FROM lokasi WHERE id_lokasi = '$id_ruang_sekarang'";
+            $sql_ruang_sekarang = "SELECT * FROM lokasi WHERE id_lokasi = '$id_ruang_sekarang'";
             $result_ruang_sekarang = mysqli_query($conn, $sql_ruang_sekarang);
             $row_ruang_sekarang = mysqli_fetch_assoc($result_ruang_sekarang);
-            $ruang_sekarang_nama = $row_ruang_sekarang['nama_lokasi'] . ' - ' . $row_ruang_sekarang['bid_lokasi'] . ' - ' . $row_ruang_sekarang['tempat_lokasi'];
+            $ruang_sekarang_nama = $row_ruang_sekarang['id_lokasi'] . ' - ' . $row_ruang_sekarang['bid_lokasi'] . ' - ' . $row_ruang_sekarang['tempat_lokasi'];
 
 
             // Query untuk menambahkan mutasi
