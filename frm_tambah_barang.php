@@ -22,11 +22,12 @@ while ($location = mysqli_fetch_assoc($locations_result)) {
 ?>
 
 <main id="main" class="main">
-    <div class="pagetitle">
-        <h1>Tambah Barang</h1>
-    </div><!-- End Page Title -->
     <div class="card">
-        <div class="card-body" style="padding-top: 50px;">
+        <div class="card-body" style="padding-top: 15px;">
+            <div class="card-title">
+                <h1 style="font-size: 20px !important; margin: 0;">Tambah Aset/Barang</h1>
+                <hr>
+            </div>
             <form method="POST" action="proses/barang/tambah_barang.php" enctype="multipart/form-data">
                 <div class="row">
                     <div class="col-md-6" style="padding-right: 10px;">

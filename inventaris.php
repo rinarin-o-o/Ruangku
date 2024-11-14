@@ -15,11 +15,12 @@ $result = mysqli_query($conn, $query);
 <main id="main" class="main">
 
     <div class="pagetitle">
-        <h1>Inventaris</h1>
+        <h1>Inventaris Ruang</h1>
         <nav>
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="home.php">Home</a></li>
+                <li class="breadcrumb-item"><a href="home.php">Dashboard</a></li>
                 <li class="breadcrumb-item">Inventaris</li>
+                <li class="breadcrumb-item active">Inventaris Ruang</li>
             </ol>
         </nav>
     </div><!-- End Page Title -->
@@ -34,24 +35,30 @@ $result = mysqli_query($conn, $query);
                             $nama_ruang = $row['bid_lokasi'];
                     ?>
                             <div class="col-xxl-5 col-md-3 mb-4">
-                                <a  href="inventaris_ruangan.php?id_lokasi=<?php echo urlencode($id_lokasi); ?>">
-                                    <div class="card info-card sales-card h-100" style="background-color: #fcf4ff; border: 1px solid #aa1bdb;">
+                                <a href="inventaris_ruangan.php?id_lokasi=<?php echo urlencode($id_lokasi); ?>">
+                                    <div class="card info-card sales-card h-100" style="background-color: #ffffff; border: 1px solid #7eb4e3; box-shadow: 2px 5px 2px rgba(0, 0, 0, 0.2);">
                                         <div class="card-body d-flex align-items-center">
-                                            <div class="card-icon rounded-circle d-flex align-items-center justify-content-center me-3">
-                                                <i class="bi bi-house-door"></i>
-                                            </div>
+                                            <div class="d-flex align-items-center">
+                                                <div class="card-icon rounded-circle d-flex align-items-center justify-content-center me-3">
+                                                    <i class="bi bi-house-door" style="font-size: 1.5rem !important; color:#53a1e5 !important;"></i> <!-- Sesuaikan ukuran -->
+                                                </div>
 
-                                            <div>
-                                                <p class="card-title mb-0 small-font" style="font-size:14px; font-color=#000000"><?php echo htmlspecialchars($id_lokasi) . ' - ' . htmlspecialchars($nama_ruang); ?></p>
+
+                                                <div>
+                                                    <p class="card-title mb-0 small-font" style="font-size: 14px; color: #000000;">
+                                                        <?php echo htmlspecialchars($id_lokasi) . ' - ' . htmlspecialchars($nama_ruang); ?>
+                                                    </p>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
+
                                 </a>
                             </div>
                     <?php
                         }
                     } else {
-                        echo "<p>No rooms found in the database.</p>";
+                        echo "<p>Tidak ada ruangan yang ditemukan</p>";
                     }
                     ?>
                 </div>

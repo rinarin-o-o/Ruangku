@@ -55,8 +55,8 @@ $total_pages = ceil($total_records / $limit);
     <nav>
       <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="home.php">Dashboard</a></li>
-        <li class="breadcrumb-item">Data</li>
-        <li class="breadcrumb-item active">Lokasi</li>
+        <li class="breadcrumb-item">Inventaris</li>
+        <li class="breadcrumb-item active">Ruang dan Lokasi</li>
       </ol>
     </nav>
   </div><!-- End Page Title -->

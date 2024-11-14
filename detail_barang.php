@@ -2,14 +2,11 @@
 include("component/header.php");
 include('koneksi/koneksi.php');
 
-// Get the 'id_barang_pemda' from the URL
 $id_barang_pemda = isset($_GET['id_barang_pemda']) ? $_GET['id_barang_pemda'] : '';
 
-// Fetch item details based on 'id_barang_pemda'
 $sql = "SELECT * FROM data_barang WHERE id_barang_pemda = '$id_barang_pemda'";
 $result = mysqli_query($conn, $sql);
 
-// Check if item is found
 if (mysqli_num_rows($result) > 0) {
   $row = mysqli_fetch_assoc($result);
 
@@ -18,14 +15,12 @@ if (mysqli_num_rows($result) > 0) {
   $result_pemilik = mysqli_query($conn, $sql_pemilik);
   $row_pemilik = mysqli_fetch_assoc($result_pemilik);
 
-  // Jika tidak ada data pemilik
   $nama_pemilik = isset($row_pemilik['nama_pemilik']) ? $row_pemilik['nama_pemilik'] : 'Pemilik tidak ditemukan';
 } else {
   echo "Data barang tidak ditemukan.";
   exit;
 }
 
-// Fetch 'bidang_lokasi' for current location
 $id_ruang_sekarang = $row['id_ruang_sekarang'];
 $queryruang = "SELECT bid_lokasi FROM lokasi WHERE id_lokasi = '$id_ruang_sekarang'";
 $resultruang = mysqli_query($conn, $queryruang);
@@ -59,7 +54,7 @@ if (mysqli_num_rows($resultruang) > 0) {
             </div>
             <!-- Nama Barang -->
             <div class="row mb-2">
-              <label for="nama_barang" class="col-sm-3 col-form-label">Nama Barang</label>
+              <label for="nama_barang" class="col-sm-3 col-form-label">Nama Aset</label>
               <div class="col-sm-8">
                 <input type="text" id="nama_barang" class="form-control" value="<?php echo $row['nama_barang']; ?>" readonly style="font-weight: bold;">
               </div>
@@ -165,80 +160,77 @@ if (mysqli_num_rows($resultruang) > 0) {
                 <div class="input-group">
                   <span class="input-group-text">Rp</span>
                   <input type="text" id="harga_total" class="form-control" value="<?php echo number_format($row['harga_total'], 2, ',', '.'); ?>" readonly>
-                  </form>
-
-
-    <a href="frm_tambah_pemeliharaan.php?id_barang=<?php echo $row['id_barang_pemda']; ?>" class="btn btn-primary">Tambah Pemeliharaan</a>
-
-                
                 </div>
               </div>
 
-              <!-- Tombol disesuaikan agar rata kanan -->
-              <div class="col-sm-3 d-flex justify-content-end align-items-center" style="padding-right: 85px;">
+              <div class="col-sm-3 d-flex justify-content-end align-items-center" style="padding-right: 50px;">
+                <a href="frm_tambah_pemeliharaan.php?id_barang_pemda=<?php echo $id_barang_pemda; ?>" class="btn btn-primary btn-sm me-2" title="Tambah Pemeliharaan">
+                  +
+                </a>
+
                 <a href="javascript:void(0);" id="togglePemeliharaanButton" onclick="togglePemeliharaan()" class="btn btn-outline-info btn-sm" title="Riwayat Pemeliharaan">
                   <i class="bi bi-clock-history"></i>
                 </a>
               </div>
-            </div>
 
-            <!-- Card Riwayat Pemeliharaan -->
-            <div class="d-none d-flex justify-content mb-3" id="PemeliharaanSection">
-              <div class="col-sm-3"></div> <!-- Offset agar sejajar dengan input -->
-              <div class="col-sm-8">
-                <div class="card-body" style="font-size: 12px; background-color: #f7faff; border: 1px; padding: 10px;">
-                  <h5 class="card-title" style="font-size: 14px;">
-                    Riwayat Pemeliharaan <span>| <?php echo $row['nama_barang']; ?></span>
-                  </h5>
-                  <div class="activity position-relative" style="margin-left: 20px;">
+              <!-- Card Riwayat Pemeliharaan -->
+              <div class="d-none d-flex justify-content mb-3" id="PemeliharaanSection">
+                <div class="col-sm-3"></div> <!-- Offset agar sejajar dengan input -->
+                <div class="col-sm-8">
+                  <div class="card-body" style="font-size: 12px; background-color: #f7faff; border: 1px; padding-bottom:0;">
+                    <h5 class="card-title">
+                      Riwayat Pemeliharaan <span>| <?php echo $row['nama_barang']; ?></span>
+                    </h5>
+                    <div class="activity position-relative" style="margin-left: 20px;">
 
-                    <?php while ($row_pemeliharaan = mysqli_fetch_assoc($result_pemeliharaan)) : ?>
-                      <div class="activity-item d-flex mb-3 position-relative">
-                        <div class="activity-label" style="width: 100px;">
-                          <?php echo $row_pemeliharaan['tgl_perbaikan']; ?>
-                        </div>
-                        <i class="bi bi-circle-fill activity-badge text-secondary align-self-start mx-2"></i>
-                        <div class="activity-content">
-                          <?php echo $row_pemeliharaan['perbaikan']; ?> -
-                          <span class="text-muted">
-                            Rp <?php echo number_format($row_pemeliharaan['biaya_perbaikan'], 2, ',', '.'); ?>
-                          </span>
-                        </div>
-
-                        <!-- Garis timeline hanya jika bukan elemen terakhir -->
-                        <?php if ($index < $total_pemeliharaan) : ?>
-                          <div class="timeline-line" style="position: absolute; left: 113px; top: 15px; width: 2px; height: 110%; 
-                          background-color: #b8b8b9;">
+                      <?php while ($row_pemeliharaan = mysqli_fetch_assoc($result_pemeliharaan)) : ?>
+                        <div class="activity-item d-flex mb-3 position-relative">
+                          <div class="activity-label" style="width: 100px;">
+                            <?php echo $row_pemeliharaan['tgl_perbaikan']; ?>
                           </div>
-                        <?php endif; ?>
-                      </div><!-- End activity item -->
-                      <?php $index++; // Increment penghitung 
-                      ?>
-                    <?php endwhile; ?>
+                          <i class="bi bi-circle-fill activity-badge text-secondary align-self-start mx-2"></i>
+                          <div class="activity-content">
+                            <?php echo $row_pemeliharaan['perbaikan']; ?> -
+                            <span class="text-muted">
+                              Rp <?php echo number_format($row_pemeliharaan['biaya_perbaikan'], 2, ',', '.'); ?>
+                            </span>
+                          </div>
 
+                          <!-- Garis timeline hanya jika bukan elemen terakhir -->
+                          <?php if ($index < $total_pemeliharaan) : ?>
+                            <div class="timeline-line" style="position: absolute; left: 113px; top: 15px; width: 2px; height: 110%; 
+                          background-color: #b8b8b9;">
+                            </div>
+                          <?php endif; ?>
+                        </div><!-- End activity item -->
+                        <?php $index++; // Increment penghitung 
+                        ?>
+                      <?php endwhile; ?>
+
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
 
-            <script>
-              function togglePemeliharaan() {
-                var PemeliharaanSection = document.getElementById("PemeliharaanSection");
-                var toggleButton = document.getElementById("togglePemeliharaanButton");
+              <script>
+                function togglePemeliharaan() {
+                  var PemeliharaanSection = document.getElementById("PemeliharaanSection");
+                  var toggleButton = document.getElementById("togglePemeliharaanButton");
 
-                PemeliharaanSection.classList.toggle("d-none"); // Toggle visibility
+                  PemeliharaanSection.classList.toggle("d-none"); // Toggle visibility
 
-                if (PemeliharaanSection.classList.contains("d-none")) {
-                  // Saat tersembunyi, kembali ke tombol info dengan ikon jam
-                  toggleButton.className = "btn btn-outline-info btn-sm";
-                  toggleButton.innerHTML = '<i class="bi bi-clock-history"></i>';
-                } else {
-                  // Saat tampil, ubah jadi tombol danger dengan ikon X
-                  toggleButton.className = "btn btn-danger btn-sm";
-                  toggleButton.innerHTML = '<i class="bi bi-x-circle" title="Close"></i>';
+                  if (PemeliharaanSection.classList.contains("d-none")) {
+                    // Saat tersembunyi, kembali ke tombol info dengan ikon jam
+                    toggleButton.className = "btn btn-outline-info btn-sm";
+                    toggleButton.innerHTML = '<i class="bi bi-clock-history"></i>';
+                  } else {
+                    // Saat tampil, ubah jadi tombol danger dengan ikon X
+                    toggleButton.className = "btn btn-danger btn-sm";
+                    toggleButton.innerHTML = '<i class="bi bi-x-circle" title="Close"></i>';
+                  }
                 }
-              }
-            </script>
+              </script>
+            </div>
           </div>
           <div class="col-md-6">
             <!-- Merk -->
@@ -321,7 +313,7 @@ if (mysqli_num_rows($resultruang) > 0) {
                 <?php if (!empty($row['foto_barang'])) : ?>
                   <img src="images/<?php echo $row['foto_barang']; ?>" alt="Foto Barang" class="img-fluid" style="max-width: 100%; height: auto; border: 1px solid #ddd; padding: 5px;">
                 <?php else : ?>
-                  <p style="font-size: 15px;">Belum menambahkan foto.</p>
+                  <p style="font-size: 15px;">None</p>
                 <?php endif; ?>
               </div>
             </div>

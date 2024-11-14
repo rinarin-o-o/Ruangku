@@ -40,17 +40,13 @@ $totalBarang = $rowBarang['total_barang'];
       <h1>Dashboard</h1>
     </div><!-- End Page Title -->
 
-    <div class="pagetitle text-center">
-      <h5>Dinkominfotik Kab. Brebes</h5>
-    </div><!-- End Page Title -->
-
     <section class="section dashboard">
       <div class="row">
 
         <!-- Fasilitas Umum Card -->
         <div class="col-xxl-3 col-md-4">
           <div class="card info-card customers-card">
-            <div class="card-body">
+            <div class="card-body-kita">
               <h5 class="card-title">Barang/Aset</h5>
               <div class="d-flex align-items-center">
                 <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
@@ -68,7 +64,7 @@ $totalBarang = $rowBarang['total_barang'];
         <!-- Kendaraan Card -->
         <div class="col-xxl-3 col-md-4">
           <div class="card info-card revenue-card">
-            <div class="card-body">
+            <div class="card-body-kita">
               <h5 class="card-title">Kendaraan</h5>
               <div class="d-flex align-items-center">
                 <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
@@ -86,7 +82,7 @@ $totalBarang = $rowBarang['total_barang'];
         <!-- Ruangan Card -->
         <div class="col-xxl-3 col-md-4">
           <div class="card info-card sales-card">
-            <div class="card-body">
+            <div class="card-body-kita">
               <h5 class="card-title">Ruangan</h5>
               <div class="d-flex align-items-center">
                 <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
