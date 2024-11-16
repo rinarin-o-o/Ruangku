@@ -1,94 +1,161 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <title>QR Code Scanner</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
-    <script src="./node_modules/html5-qrcode/html5-qrcode.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scan QR Code</title>
     <style>
-        body {
-            font-family: 'Roboto', sans-serif;
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+            background-color: #000;
+        }
+
+        video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            margin: 0;
-            background-color: #f7f7f7;
-        }
-
-        .scanner-container {
-            text-align: center;
-            background: #ffffff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            max-width: 500px;
-        }
-
-        #qr-reader {
-            width: 100%;
-            height: 300px;
-        }
-
-        .qr-result {
-            margin-top: 20px;
-            font-size: 1.2em;
-            color: #333;
-        }
-
-        .btn-start-scan {
-            margin-top: 20px;
-            padding: 10px 20px;
-            background-color: #007bff;
             color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
+            z-index: 100;
         }
 
-        .btn-start-scan:hover {
-            background-color: #0056b3;
+        #qrResult {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 18px;
+            font-weight: bold;
+            color: lime;
+            z-index: 101;
+        }
+
+        #errorMessage {
+            position: absolute;
+            top: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 16px;
+            color: red;
+            z-index: 101;
+        }
+
+        .scan-box {
+            border: 2px solid lime;
+            position: absolute;
+            z-index: 101;
+            pointer-events: none;
         }
     </style>
 </head>
-<body>
 
-    <div class="scanner-container">
-        <h2>Scan QR Code</h2>
-        <div id="qr-reader"></div>
-        <button class="btn-start-scan" id="start-scan-btn">Start Scanning</button>
-        <div class="qr-result" id="result"></div>
+<body>
+    <video id="camera" autoplay></video>
+    <canvas id="canvas"></canvas>
+    <div class="container">
+        <p id="qrResult">Mencari QR Code...</p>
+        <p id="errorMessage"></p>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/jsqr/dist/jsQR.js"></script>
+
     <script>
-        // Initialize the QR Code scanner
-        const qrCodeScanner = new Html5Qrcode("qr-reader");
+        const videoElement = document.getElementById('camera');
+        const canvasElement = document.getElementById('canvas');
+        const canvasContext = canvasElement.getContext('2d');
+        const qrResult = document.getElementById('qrResult');
+        const errorMessage = document.getElementById('errorMessage');
 
-        // Start scanning when the button is clicked
-        document.getElementById("start-scan-btn").addEventListener("click", function() {
-            qrCodeScanner.start(
-                { facingMode: "environment" }, // Use the rear camera
-                {
-                    fps: 10, // Scan at 10 frames per second
-                    qrbox: 250 // Set the scanning box size
-                },
-                function(qrCodeMessage) {
-                    // Display the scanned result
-                    document.getElementById("result").innerText = "Scanned QR Code: " + qrCodeMessage;
-                    qrCodeScanner.stop(); // Stop scanning after successful scan
-                },
-                function(errorMessage) {
-                    // Handle scanning errors
-                    console.log(errorMessage);
-                }
-            ).catch(function(error) {
-                console.error(error);
-                alert("Error starting the camera. Please try again.");
+        // Setting up video stream
+        navigator.mediaDevices.getUserMedia({
+                video: true
+            })
+            .then((stream) => {
+                videoElement.srcObject = stream;
+                videoElement.play();
+                requestAnimationFrame(scanQRCode); // Start scanning once video is playing
+            })
+            .catch((error) => {
+                console.error('Error accessing camera:', error);
+                errorMessage.textContent = "Tidak dapat mengakses kamera. Pastikan izin kamera telah diberikan.";
             });
-        });
-    </script>
 
+        // Function to scan QR Code from video stream
+        function scanQRCode() {
+            if (videoElement.readyState === videoElement.HAVE_ENOUGH_DATA) {
+                // Set canvas size equal to video feed size
+                canvasElement.width = videoElement.videoWidth;
+                canvasElement.height = videoElement.videoHeight;
+
+                // Draw the current video frame onto the canvas
+                canvasContext.drawImage(videoElement, 0, 0, canvasElement.width, canvasElement.height);
+
+                // Get the image data from the canvas
+                const imageData = canvasContext.getImageData(0, 0, canvasElement.width, canvasElement.height);
+                const code = jsQR(imageData.data, canvasElement.width, canvasElement.height);
+
+                if (code) {
+                    // If QR Code is detected, display the result
+                    qrResult.textContent = 'QR Code ditemukan: ' + code.data;
+
+                    // Draw the QR Code location on the canvas
+                    canvasContext.beginPath();
+                    canvasContext.lineWidth = 10;
+                    canvasContext.strokeStyle = 'lime';
+                    canvasContext.rect(code.getBoundingBox().topLeft.x, code.getBoundingBox().topLeft.y,
+                        code.getBoundingBox().bottomRight.x - code.getBoundingBox().topLeft.x,
+                        code.getBoundingBox().bottomRight.y - code.getBoundingBox().topLeft.y);
+                    canvasContext.stroke();
+
+                    // Process the QR Code data
+                    cekQRCode(code.data);
+                } else {
+                    // If no QR Code is found, continue scanning
+                    qrResult.textContent = 'Mencari QR Code...';
+                }
+            }
+            requestAnimationFrame(scanQRCode); // Continue scanning
+        }
+
+        function cekQRCode(qrData) {
+            console.log('QR Code yang dideteksi:', qrData); // Log QR Code yang ditemukan
+            fetch(`cek_qrcode.php?qrcode=${encodeURIComponent(qrData)}`)
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Respons dari server:', data); // Log respons dari server
+                    if (data.isLocation) {
+                        console.log('Arahkan ke qrcode_inventaris.php');
+                        window.location.href = `qrcode_inventaris.php?id_lokasi=${data.id_lokasi}`;
+                    } else if (data.isItem) {
+                        console.log('Arahkan ke qrcode_detail_barang.php');
+                        window.location.href = `qrcode_detail_barang.php?id_barang_pemda=${data.id_barang_pemda}`;
+                    } else {
+                        console.log('QR Code tidak valid.');
+                        qrResult.textContent = "QR Code tidak valid.";
+                    }
+                })
+                .catch(error => {
+                    console.error('Kesalahan saat memeriksa QR Code:', error);
+                    qrResult.textContent = "Terjadi kesalahan saat memproses QR Code.";
+                });
+        }
+    </script>
 </body>
+
 </html>

@@ -12,28 +12,39 @@ $param_types = ""; // Store bind types
 
 if (!empty($_GET['query'])) {
   $search = '%' . mysqli_real_escape_string($conn, $_GET['query']) . '%';
-  $search_query = "WHERE id_barang_pemda LIKE ? OR kode_barang LIKE ? OR nama_barang LIKE ?";
+  $search_query = "(id_barang_pemda LIKE ? OR kode_barang LIKE ? OR nama_barang LIKE ?)";
   array_push($search_params, $search, $search, $search);
   $param_types .= "sss";
 }
 
-$active_tab = isset($_GET['tab']) ? $_GET['tab'] : 'data_barang'; // Default to 'data_barang'
+$active_tab = isset($_GET['tab']) ? $_GET['tab'] : 'data_barang';
 
 switch ($active_tab) {
   case 'barang_kurang_baik':
-    $tab_condition = "WHERE kondisi_barang = 'Kurang Baik'";
+    $tab_condition = "kondisi_barang = 'Kurang Baik'";
     break;
   case 'barang_rusak':
-    $tab_condition = "WHERE kondisi_barang = 'Rusak Berat'";
+    $tab_condition = "kondisi_barang = 'Rusak Berat'";
     break;
   default:
-    $tab_condition = ""; // No filter for 'data_barang'
+    $tab_condition = ""; // Semua barang tanpa filter kondisi
 }
 
+// Combine search and tab conditions
+$combined_condition = "";
+if ($search_query && $tab_condition) {
+  $combined_condition = "WHERE $search_query AND $tab_condition";
+} elseif ($search_query) {
+  $combined_condition = "WHERE $search_query";
+} elseif ($tab_condition) {
+  $combined_condition = "WHERE $tab_condition";
+}
+
+// Query with combined conditions
 $sql = "SELECT id_barang_pemda, kondisi_barang, keterangan, harga_awal, no_regristrasi, 
                tgl_pembelian, kode_barang, harga_total, nama_barang 
         FROM data_barang 
-        $search_query $tab_condition
+        $combined_condition
         LIMIT ?, ?";
 
 $stmt = mysqli_prepare($conn, $sql);
@@ -45,11 +56,12 @@ mysqli_stmt_bind_param($stmt, $param_types, ...$search_params);
 mysqli_stmt_execute($stmt);
 $result = mysqli_stmt_get_result($stmt);
 
-$count_sql = "SELECT COUNT(*) AS total FROM data_barang $search_query $tab_condition";
+// Total records count
+$count_sql = "SELECT COUNT(*) AS total FROM data_barang $combined_condition";
 $count_stmt = mysqli_prepare($conn, $count_sql);
 
 if (!empty($search_query)) {
-  mysqli_stmt_bind_param($count_stmt, substr($param_types, 0, -2), ...array_slice($search_params, 0, -2)); // Only bind search params
+  mysqli_stmt_bind_param($count_stmt, substr($param_types, 0, -2), ...array_slice($search_params, 0, -2));
 }
 
 mysqli_stmt_execute($count_stmt);
@@ -61,7 +73,27 @@ $range = 2;
 $start_page = max(1, $page - $range);
 $end_page = min($total_pages, $page + $range);
 ?>
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+  <style>
+    .tab-content {
+      position: relative;
+      z-index: 1;
+    }
+
+    .tab-pane {
+      display: none;
+    }
+
+    .tab-pane.show {
+      display: block;
+    }
+  </style>
+</head>
+
+</html>
 <main id="main" class="main">
   <div class="pagetitle">
     <h1>Daftar Aset dan Barang</h1>
