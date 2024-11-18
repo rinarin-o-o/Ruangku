@@ -1,102 +1,112 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SiMabar - Sistem Manajemen Barang</title>
-    <style>
-        body {
-            background: linear-gradient(to bottom, #00b0ff, #004080);
-            color: white;
-            font-family: 'Outfit', sans-serif; /* Ensure the Outfit font is loaded */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
-        }
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Ruangku - Dinkominfotik</title>
+  <meta name="description" content="">
+  <meta name="keywords" content="">
 
-        .container {
-            text-align: left;
-            max-width: 600px;
-            padding: 20px;
-            border-radius: 10px;
-            background-color: rgba(0, 0, 0, 0.3);
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
-        }
+  <!-- Favicons -->
+  <link href="assets/img/logo.png" rel="icon">
 
-        h1 {
-            font-size: 4em;
-            margin-bottom: 0.2em;
-            color: #007bff; /* Match logo color */
-        }
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Nunito:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="assets/vendor/aos/aos.css" rel="stylesheet">
+  <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+  <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
 
-        h2 {
-            font-size: 1.5em;
-            margin-bottom: 1em;
-        }
-
-        p {
-            line-height: 1.5;
-            max-width: 500px;
-            margin: 0 auto 2em;
-            font-size: 1.1em;
-        }
-
-        .logo {
-            position: absolute;
-            top: 50%;
-            right: 10%;
-            transform: translateY(-50%);
-            width: 300px;
-            height: 300px;
-        }
-
-        .logo img {
-            width: 100%;
-            height: 100%;
-        }
-
-        .button {
-            background-color: #d9d9d9;
-            color: black;
-            border: none;
-            padding: 1em 3em;
-            border-radius: 8px;
-            font-size: 1.5em;
-            cursor: pointer;
-            transition: background-color 0.3s;
-            display: flex;
-            align-items: center;
-        }
-
-        .button:hover {
-            background-color: #b3b3b3;
-        }
-
-        .button svg {
-            margin-right: 10px;
-            fill: black;
-            width: 1.5em;
-            height: 1.5em;
-        }
-    </style>
+  <link href="assets/css/main.css" rel="stylesheet">
 </head>
-<body>
-    <div class="container">
-        <h1>SiMabar</h1>
-        <h2>Sistem Manajemen Barang</h2>
-        <p>
-            SiMabar berguna untuk mendata aset atau inventaris barang, mengawasi perpindahan, penanggungjawab, dan penggunaannya serta menghitung penyusutan dan mengurangi risiko hilangnya aset.
-        </p>
-        <button class="button" onclick="window.location.href='login_admin.php'">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15v-2h2v2h-2zm2.07-7.75L13 9V5h-2v4.28L8.93 9.25 8 10.34l4 4 4-4-.93-1.09z"/></svg>
-    Login
-</button>
+
+<body class="index-page">
+  <header id="header" class="header d-flex align-items-center fixed-top">
+    <div class="container-fluid container-xl position-relative d-flex align-items-center">
+
+      <a href="#" class="logo d-flex align-items-center me-auto">
+        <img src="assets/img/logo.png" alt="">
+        <h1 class="sitename">Ruangku</h1>
+      </a>
+
+      <nav id="navmenu" class="navmenu">
+        <ul>
+          <li><a href="index.html#hero" class="active">Home</a></li>
+          <li><a href="index.html#about">Tentang</a></li>
+          <li><a href="index.html#features">Fitur</a></li>
+          <li><a href="index.html#services">Data</a></li>
+          <li><a href="index.html#pricing">Kontak</a></li>
+        </ul>
+        <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+      </nav>
+
+      <a class="btn-getstarted" href="index.html#about">Login</a>
 
     </div>
-    <div class="logo">
-        <img src="images/logo.png" alt="SiMabar Logo">
+  </header>
+
+  <header id="header" class="header d-flex align-items-center">
+    <div class="container-fluid container-xl position-relative d-flex align-items-center">
+ 
+      <a href="#" class="logo d-flex align-items-center me-auto">
+        <h1 class="sitename">Ruangku</h1>
+      </a>
+
+      <nav id="navmenu" class="navmenu">
+        <i class="mobile-nav-toggle d-xl-none"></i>
+      </nav>
     </div>
+  </header>
+
+  <main class="main">
+
+    <section id="hero" class="hero section">
+
+      <div class="container">
+        <div class="row gy-4">
+          <div class="col-lg-6 order-1 order-lg-1 hero-img" data-aos="zoom-out" data-aos-delay="200">
+            <img src="assets/img/itongbg.png" class="img-fluid animated" alt="">
+          </div>
+          <div class="col-lg-6 order-2 order-lg-2 d-flex flex-column justify-content-center" data-aos="zoom-out">
+            <h1>Ruangku</h1>
+            <p> Aplikasi inventarisasi untuk pengelolaan aset di Dinas Komunikasi, Informatika, dan Statistik
+              Kabupaten Brebes.</p>
+            <div class="d-flex">
+              <a href="login_admin.php" class="btn-get-started">Mulai</a>
+              <a href="scan.php" class="glightbox btn-watch-video d-flex align-items-center"><i
+                  class="bi bi-camera"></i><span>Scan</span></a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </section><!-- /Hero Section -->
+
+  </main>
+
+  <!-- Scroll Top -->
+  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i
+      class="bi bi-arrow-up-short"></i></a>
+
+  <!-- Preloader -->
+  <div id="preloader"></div>
+
+  <!-- Vendor JS Files -->
+  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/vendor/php-email-form/validate.js"></script>
+  <script src="assets/vendor/aos/aos.js"></script>
+  <script src="assets/vendor/glightbox/js/glightbox.min.js"></script>
+  <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
+  <script src="assets/vendor/waypoints/noframework.waypoints.js"></script>
+  <script src="assets/vendor/imagesloaded/imagesloaded.pkgd.min.js"></script>
+  <script src="assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+
+  <!-- Main JS File -->
+  <script src="assets/js/main.js"></script>
+
 </body>
+
 </html>
