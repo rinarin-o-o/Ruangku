@@ -34,13 +34,13 @@ $totalBarang = $rowBarang['total_barang'];
 ?>
 
 <body>
+
+<main id="main" class="main">
 <div class="floating-button">
-    <a href="scan.php">
+    <a href="scan2.php">
         <i class="bi bi-camera-fill" title="Scan QRCODE"></i>
     </a>
 </div>
-
-<main id="main" class="main">
 
     <div class="pagetitle">
       <h1>Dashboard</h1>

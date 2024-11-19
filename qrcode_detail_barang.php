@@ -17,7 +17,7 @@ if (mysqli_num_rows($result) > 0) {
 
     $nama_pemilik = isset($row_pemilik['nama_pemilik']) ? $row_pemilik['nama_pemilik'] : 'Pemilik tidak ditemukan';
 } else {
-    echo "Data barang tidak ditemukan.";
+    echo "Data barang tidak ditemukan. Pastikan bahwa anda men-scan QRCode untuk Barang.";
     exit;
 }
 
@@ -169,11 +169,7 @@ if (mysqli_num_rows($resultruang) > 0) {
                                 </div>
                             </div>
 
-                            <div class="col-sm-3 d-flex justify-content-end align-items-center" style="padding-right: 50px;">
-                                <a href="frm_tambah_pemeliharaan.php?id_barang_pemda=<?php echo $id_barang_pemda; ?>" class="btn btn-primary btn-sm me-2" title="Tambah Pemeliharaan">
-                                    +
-                                </a>
-
+                            <div class="col-sm-2 d-flex justify-content-end align-items-center">
                                 <a href="javascript:void(0);" id="togglePemeliharaanButton" onclick="togglePemeliharaan()" class="btn btn-outline-info btn-sm" title="Riwayat Pemeliharaan">
                                     <i class="bi bi-clock-history"></i>
                                 </a>
@@ -354,31 +350,4 @@ if (mysqli_num_rows($resultruang) > 0) {
             toggleLink.innerHTML = "Lihat Foto...";
         }
     }
-</script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-    $(document).ready(function() {
-        // Event handler for delete button
-        $('.btn-hapus').on('click', function(e) {
-            e.preventDefault(); // Prevent the default anchor behavior
-            var id_barang_pemda = $(this).data('id_barang_pemda'); // Get the id_barang_pemda from data attribute
-
-            // SweetAlert confirmation dialog
-            Swal.fire({
-                title: 'Apakah Anda yakin?',
-                text: "Data barang akan dihapus secara permanen!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Ya, hapus!',
-                cancelButtonText: 'Batal'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    window.location.href = 'proses/barang/hapus_barang.php?id_barang_pemda=' + id_barang_pemda;
-                }
-            });
-        });
-    });
 </script>

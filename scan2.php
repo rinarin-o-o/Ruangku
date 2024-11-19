@@ -1,5 +1,5 @@
 <?php
-include('component/style.php');
+include('component/header.php');
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -7,38 +7,10 @@ include('component/style.php');
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans|Nunito|Poppins" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.1/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.1/js/bootstrap.bundle.min.js"></script>
+    <title>QR Code Scanner</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
     <script src="./node_modules/html5-qrcode/html5-qrcode.min.js"></script>
     <style>
-        body {
-            font-family: 'Nunito', sans-serif;
-            background-color: #f7f7f7;
-            margin: 0;
-        }
-
-        .header {
-            height: 60px;
-            background-color: #ffffff;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            z-index: 1000;
-        }
-
-        main {
-            margin-top: 70px;
-        }
-
-        .card {
-            width: 100%;
-            max-width: 600px;
-            /* Batas maksimum lebar card */
-            margin: 0 auto;
-            /* Posisi card di tengah */
-            border-radius: 10px;
-            /* Sudut melengkung */
-        }
-
         #qr-reader-barang,
         #qr-reader-kir {
             width: 100%;
@@ -66,46 +38,34 @@ include('component/style.php');
     </style>
 </head>
 
-<body>
-    <header id="header" class="header fixed-top d-flex align-items-center">
-        <div class="d-flex align-items-center justify-content-between w-100 px-4">
-            <a href="index.php" class="logo d-flex align-items-center" style="text-decoration: none;">
-                <img src="images/logo.png" alt="" style="width:auto; height:40px;">
-                <span class="d-inline-block ms-2">Ruang<span style="color: #72a7df;">Ku</span></span>
-            </a>
-        </div>
-    </header>
+<main id="main" class="main">
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title ">QRCode Scanner</h5>
+            <!-- Tab Navigation -->
+            <ul class="nav nav-tabs d-flex" id="myTabjustified" role="tablist">
+                <li class="nav-item flex-fill" role="presentation">
+                    <button class="nav-link w-100 active" id="scan-barang-tab" data-bs-toggle="tab" data-bs-target="#scan-barang" type="button" role="tab" aria-controls="scan-barang" aria-selected="true">Barang</button>
+                </li>
+                <li class="nav-item flex-fill" role="presentation">
+                    <button class="nav-link w-100" id="scan-kir-tab" data-bs-toggle="tab" data-bs-target="#scan-kir" type="button" role="tab" aria-controls="scan-kir" aria-selected="false">KIR</button>
+                </li>
+            </ul>
 
+            <!-- Tab Content -->
+            <div class="tab-content pt-2" id="myTabjustifiedContent">
+                <!-- Tab for Barang -->
+                <div class="tab-pane fade show active" id="scan-barang" role="tabpanel" aria-labelledby="scan-barang-tab">
+                    <div id="qr-reader-barang"></div>
+                </div>
 
-    <main class="container py-3">
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title ">QRCode Scanner</h5>
-                <!-- Tab Navigation -->
-                <ul class="nav nav-tabs d-flex" id="myTabjustified" role="tablist">
-                    <li class="nav-item flex-fill" role="presentation">
-                        <button class="nav-link w-100 active" id="scan-barang-tab" data-bs-toggle="tab" data-bs-target="#scan-barang" type="button" role="tab" aria-controls="scan-barang" aria-selected="true">Barang</button>
-                    </li>
-                    <li class="nav-item flex-fill" role="presentation">
-                        <button class="nav-link w-100" id="scan-kir-tab" data-bs-toggle="tab" data-bs-target="#scan-kir" type="button" role="tab" aria-controls="scan-kir" aria-selected="false">KIR</button>
-                    </li>
-                </ul>
-
-                <!-- Tab Content -->
-                <div class="tab-content pt-2" id="myTabjustifiedContent">
-                    <!-- Tab for Barang -->
-                    <div class="tab-pane fade show active" id="scan-barang" role="tabpanel" aria-labelledby="scan-barang-tab">
-                        <div id="qr-reader-barang"></div>
-                    </div>
-
-                    <!-- Tab for KIR -->
-                    <div class="tab-pane fade" id="scan-kir" role="tabpanel" aria-labelledby="scan-kir-tab">
-                        <div id="qr-reader-kir"></div>
-                    </div>
+                <!-- Tab for KIR -->
+                <div class="tab-pane fade" id="scan-kir" role="tabpanel" aria-labelledby="scan-kir-tab">
+                    <div id="qr-reader-kir"></div>
                 </div>
             </div>
         </div>
-    </main>
+    </div>
 
     <script>
         const qrCodeScannerBarang = new Html5Qrcode("qr-reader-barang");
@@ -150,7 +110,7 @@ include('component/style.php');
                         qrbox: qrbox
                     },
                     function(qrCodeMessage) {
-                        window.location.href = "qrcode_detail_barang.php?id_barang_pemda=" + encodeURIComponent(qrCodeMessage);
+                        window.location.href = "detail_barang.php?id_barang_pemda=" + encodeURIComponent(qrCodeMessage);
                         qrCodeScannerBarang.stop();
                     },
                     function(errorMessage) {
@@ -184,7 +144,7 @@ include('component/style.php');
                         qrbox: qrbox
                     },
                     function(qrCodeMessage) {
-                        window.location.href = "qrcode_inventaris.php?id_lokasi=" + encodeURIComponent(qrCodeMessage);
+                        window.location.href = "inventaris_ruangan.php?id_lokasi=" + encodeURIComponent(qrCodeMessage);
                         qrCodeScannerKir.stop();
                     },
                     function(errorMessage) {
@@ -223,6 +183,8 @@ include('component/style.php');
             }
         });
     </script>
-</body>
+</main>
 
 </html>
+<?php
+include('component/footer.php');

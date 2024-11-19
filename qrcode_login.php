@@ -29,7 +29,6 @@ $id_barang_pemda = isset($_GET['id_barang_pemda']) ? $_GET['id_barang_pemda'] : 
   <!--<link href="css/kita.css" rel="stylesheet">-->
 
   <style>
-
     body {
       background: rgba(179, 200, 207, 0.85) url('images/bg2.jpeg') no-repeat center center fixed;
       background-size: cover;
@@ -142,6 +141,9 @@ $id_barang_pemda = isset($_GET['id_barang_pemda']) ? $_GET['id_barang_pemda'] : 
 
 
                 <form action="proses/qrcode_login.php" method="POST" class="row g-3 needs-validation" novalidate>
+                  <!-- Menambahkan hidden input untuk id_barang_pemda -->
+                  <input type="hidden" name="id_barang_pemda" value="<?php echo htmlspecialchars($id_barang_pemda); ?>">
+
                   <div class="col-12">
                     <label for="yourUsername" class="form-label">Username</label>
                     <div class="input-group has-validation">
@@ -163,8 +165,6 @@ $id_barang_pemda = isset($_GET['id_barang_pemda']) ? $_GET['id_barang_pemda'] : 
                     </div>
                   </div>
                 </form>
-
-
               </div>
             </div>
 

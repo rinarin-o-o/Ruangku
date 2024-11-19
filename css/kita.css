@@ -29,3 +29,30 @@
     font-size: 13px;
     color: #012970;
   }
+
+  .floating-button {
+    position: fixed;
+    bottom: 60px; /* Jarak dari bawah */
+    right: 25px; /* Jarak dari kanan */
+    z-index: 1000; /* Pastikan di atas elemen lain */
+    background-color: #007bff; /* Warna tombol */
+    border-radius: 50%; /* Membuat tombol bulat */
+    width: 60px; /* Lebar tombol */
+    height: 60px; /* Tinggi tombol */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2); /* Efek bayangan */
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.floating-button:hover {
+    background-color: #0056b3; /* Warna saat hover */
+    transform: scale(1.1); /* Perbesar sedikit saat hover */
+}
+
+.floating-button i {
+    font-size: 24px; /* Ukuran ikon */
+    color: white; /* Warna ikon */
+}
