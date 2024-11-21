@@ -38,6 +38,37 @@ if (!empty($search_query)) {
     mysqli_stmt_bind_param($count_stmt, substr($param_types, 0, -2), ...array_slice($search_params, 0, -2)); // Only bind search params
 }
 
+// Query untuk mengambil kendaraan yang status pajaknya belum lunas
+$query_unpaid_tax = "SELECT * FROM data_barang WHERE kategori = 'Barang Bergerak (Kendaraan)' AND status_stnk = 'Belum Lunas'";
+$result_unpaid_tax = mysqli_query($conn, $query_unpaid_tax);
+
+// Menyimpan hasil query dalam array
+$unpaid_tax_vehicles = [];
+while ($row = mysqli_fetch_assoc($result_unpaid_tax)) {
+    $unpaid_tax_vehicles[] = $row;
+}
+
+// Menentukan jumlah kendaraan yang pajaknya belum lunas
+$count_unpaid_tax = count($unpaid_tax_vehicles);
+
+
+// Query untuk mengambil kendaraan yang status no polisi tidak aktif
+$query_unpaid_tax2 = "SELECT * FROM data_barang WHERE kategori = 'Barang Bergerak (Kendaraan)' AND status_no_polisi = 'Tidak aktif'";
+$result_unpaid_tax2 = mysqli_query($conn, $query_unpaid_tax2);
+
+// Menyimpan hasil query dalam array
+$unpaid_tax_vehicles2 = [];
+while ($row = mysqli_fetch_assoc($result_unpaid_tax2)) {
+    $unpaid_tax_vehicles2[] = $row;
+}
+
+// Menentukan jumlah kendaraan yang no polisi tidak aktif
+$count_unpaid_tax2 = count($unpaid_tax_vehicles2);
+
+
+
+
+
 mysqli_stmt_execute($count_stmt);
 $count_result = mysqli_stmt_get_result($count_stmt);
 $total_records = mysqli_fetch_assoc($count_result)['total'];
