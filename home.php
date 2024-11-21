@@ -1,52 +1,13 @@
 <?php
 include('component/header.php');
-include('koneksi/koneksi.php'); // Include the database connection
-
-// KENDARAAN
-$queryKendaraan = "SELECT COUNT(DISTINCT kategori) AS total_kendaraan FROM data_barang WHERE kategori = 'kendaraan'";
-$resultKendaraan = mysqli_query($conn, $queryKendaraan);
-$rowKendaraan = mysqli_fetch_assoc($resultKendaraan);
-$totalKendaraan = $rowKendaraan['total_kendaraan'];
-
-// RUANGAN
-$queryRuang = "SELECT COUNT(*) AS total_ruang 
-              FROM lokasi 
-              WHERE LOWER(TRIM(kategori_lokasi)) = 'ruangan'";
-$resultRuang = mysqli_query($conn, $queryRuang);
-
-if (!$resultRuang) {
-    die('Query Error: ' . mysqli_error($conn));
-}
-
-$rowRuang = mysqli_fetch_assoc($resultRuang);
-$totalRuang = $rowRuang['total_ruang'];
-
-// BARANG (Fasilitas Umum)
-$queryBarang = "SELECT COUNT(*) AS total_barang FROM data_barang";
-$resultBarang = mysqli_query($conn, $queryBarang);
-
-if (!$resultBarang) {
-    die('Query Error: ' . mysqli_error($conn));
-}
-
-$rowBarang = mysqli_fetch_assoc($resultBarang);
-$totalBarang = $rowBarang['total_barang'];
+include('proses/dashboard/get_data.php');
 ?>
 
 <body>
-<<<<<<< HEAD
-=======
-<div class="floating-button">
-    <a href="scan.php">
-        <i class="bi bi-camera-fill" title="Scan QRCODE"></i>
-    </a>
-</div>
->>>>>>> 8794dfa5ca3bdc204900f670156ef4a33b0cc6d6
-
 <main id="main" class="main">
 <div class="floating-button">
     <a href="scan2.php">
-        <i class="bi bi-camera-fill" title="Scan QRCODE"></i>
+        <i class="bi bi-camera-fill" title="Pindai QR Code"></i>
     </a>
 </div>
 
@@ -57,25 +18,24 @@ $totalBarang = $rowBarang['total_barang'];
     <section class="section dashboard">
       <div class="row">
 
-        <!-- Fasilitas Umum Card -->
+        <!-- Barang -->
         <div class="col-xxl-3 col-md-4">
           <div class="card info-card customers-card">
             <div class="card-body-kita">
-              <h5 class="card-title">Barang/Aset</h5>
+              <h5 class="card-title">Barang</h5>
               <div class="d-flex align-items-center">
                 <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
                   <i class="bi bi-box"></i>
                 </div>
                 <div class="ps-3">
                   <h6><?php echo $totalBarang; ?></h6>
-                  <span class="text-muted small pt-2 ps-1">Barang/Aset</span>
+                  <span class="text-muted small pt-2 ps-1">Barang</span>
                 </div>
               </div>
             </div>
           </div>
-        </div><!-- End Fasilitas Umum Card -->
-
-        <!-- Kendaraan Card -->
+        </div><!-- End Barang -->
+        <!-- Kendaraan -->
         <div class="col-xxl-3 col-md-4">
           <div class="card info-card revenue-card">
             <div class="card-body-kita">
@@ -91,9 +51,8 @@ $totalBarang = $rowBarang['total_barang'];
               </div>
             </div>
           </div>
-        </div><!-- End Kendaraan Card -->
-
-        <!-- Ruangan Card -->
+        </div><!-- End Kendaraan -->
+        <!-- Ruangan -->
         <div class="col-xxl-3 col-md-4">
           <div class="card info-card sales-card">
             <div class="card-body-kita">
@@ -109,7 +68,7 @@ $totalBarang = $rowBarang['total_barang'];
               </div>
             </div>
           </div>
-        </div><!-- End Ruangan Card -->
+        </div><!-- End Ruangan -->
 
       </div><!-- End Row -->
     </section>

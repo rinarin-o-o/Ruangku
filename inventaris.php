@@ -1,19 +1,12 @@
 <?php
-include('koneksi/koneksi.php'); // Include DB connection
+include('koneksi/koneksi.php');
 include("component/header.php");
 
-// Fetch room data
-$query = "
-    SELECT *
-    FROM lokasi
-    WHERE kategori_lokasi = 'Ruangan'
-";
-
+$query = "SELECT * FROM lokasi WHERE kategori_lokasi = 'Ruangan'";
 $result = mysqli_query($conn, $query);
 ?>
 
 <main id="main" class="main">
-
     <div class="pagetitle">
         <h1>Inventaris Ruang</h1>
         <nav>

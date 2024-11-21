@@ -1,28 +1,6 @@
 <?php
-ob_start();
 include('component/header.php');
-include('koneksi/koneksi.php'); // Include DB connection
-
-// Check if the 'id_lokasi' is passed in the URL
-if (!isset($_GET['id_lokasi'])) {
-    // Redirect to the location list page if id_lokasi is not set
-    header('Location: lokasi.php');
-    exit;
-}
-
-$id_lokasi = $_GET['id_lokasi'];
-
-// Fetch existing location data
-$sql = "SELECT * FROM lokasi WHERE id_lokasi = '$id_lokasi'";
-$result = mysqli_query($conn, $sql);
-
-if (mysqli_num_rows($result) == 1) {
-    $row = mysqli_fetch_assoc($result);
-} else {
-    // Redirect to the location list page if no data found
-    header('Location: lokasi.php');
-    exit;
-}
+include("proses/lokasi/get data/get_data_edit_lokasi.php");
 ?>
 
 <main id="main" class="main">
@@ -36,6 +14,7 @@ if (mysqli_num_rows($result) == 1) {
             <form id="editLocationForm" action="proses/lokasi/edit_lokasi.php" method="POST">
                 <div class="row" style="padding-top: 10px;">
                     <div class="col-md-6">
+                        <!-- kategori -->
                         <div class="row mb-2">
                             <label for="kategori_lokasi" class="col-sm-3 col-form-label">Kategori <span style="color: red;">*</span></label>
                             <div class="col-sm-8">
@@ -44,43 +23,44 @@ if (mysqli_num_rows($result) == 1) {
                                 </select>
                             </div>
                         </div>
+                        <!-- kode ruag -->
                         <div class="row mb-2">
                             <label for="id_lokasi" class="col-sm-3 col-form-label">Kode Ruang <span style="color: red;">*</span></label>
                             <div class="col-sm-8">
                                 <input type="text" name="id_lokasi" class="form-control" value="<?php echo htmlspecialchars($row['id_lokasi']); ?>" readonly>
                             </div>
                         </div>
-
+                        <!-- ama ruang -->
                         <div class="row mb-2">
                             <label for="bid_lokasi" class="col-sm-3 col-form-label">Nama Ruang <span style="color: red;">*</span></label>
                             <div class="col-sm-8">
                                 <input type="text" name="bid_lokasi" class="form-control" value="<?php echo isset($row['bid_lokasi']) ? htmlspecialchars($row['bid_lokasi']) : ''; ?>">
                             </div>
                         </div>
-
-
-                    </div>
+                    </div> <!-- End kolom -->
                     <div class="col-md-6">
+                        <!-- kode lokasi -->
                         <div class="row mb-2">
                             <label for="nama_lokasi" class="col-sm-3 col-form-label">Kode Lokasi</label>
                             <div class="col-sm-8">
                                 <input type="text" name="nama_lokasi" class="form-control" value="<?php echo htmlspecialchars($row['nama_lokasi']); ?>">
                             </div>
                         </div>
+                        <!-- nama lokasi -->
                         <div class="row mb-2">
                             <label for="tempat_lokasi" class="col-sm-3 col-form-label">Lokasi <span style="color: red;">*</span></label>
                             <div class="col-sm-8">
                                 <input type="text" name="tempat_lokasi" class="form-control" value="<?php echo htmlspecialchars($row['tempat_lokasi']); ?>" required>
                             </div>
                         </div>
-
+                        <!-- keterangan -->
                         <div class="row mb-4">
                             <label for="desk_lokasi" class="col-sm-3 col-form-label">Keterangan</label>
                             <div class="col-sm-8">
                                 <textarea name="desk_lokasi" class="form-control"><?php echo isset($row['desk_lokasi']) ? htmlspecialchars($row['desk_lokasi']) : ''; ?></textarea>
                             </div>
                         </div>
-
+                        <!-- tombol -->
                         <div class="row mb-4">
                             <div class="col-sm-8 offset-sm-3 text-end">
                                 <button type="submit" class="btn btn-primary" id="submitButton">Perbaharui</button>
@@ -89,11 +69,10 @@ if (mysqli_num_rows($result) == 1) {
                         </div>
                     </div>
                 </div>
-            </form><!-- End Edit Location Form -->
+            </form>
         </div>
-    </div>
-
-</main><!-- End Main Content -->
+    </div> <!-- End form -->
+</main>
 
 <?php include("component/footer.php"); ?>
 

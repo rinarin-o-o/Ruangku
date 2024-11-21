@@ -35,7 +35,7 @@ if (mysqli_num_rows($resultruang) > 0) {
 <header id="header" class="header fixed-top d-flex align-items-center">
     <div class="d-flex align-items-center justify-content-between">
         <a href="#" class="logo d-flex align-items-center" style="margin-left: 20px;">
-            <img src="images/logo.png" alt="" style="width:auto; height:40px;">
+            <img src="assets/images/logo.png" alt="" style="width:auto; height:40px;">
             <span class="d-inline-block">Ruang<span style="color: #72a7df;">Ku</span></span>
         </a>
     </div>

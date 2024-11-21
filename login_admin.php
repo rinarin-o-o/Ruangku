@@ -13,24 +13,23 @@ require_once 'koneksi/koneksi.php';
   <title>Ruangku - Login Admin</title>
 
   <!-- Favicons -->
-  <link href="images/favicon.png" rel="icon">
-  <link href="images/apple-touch-icon.png" rel="apple-touch-icon">
+  <link href="http://localhost/Ruangku/assets/images/logo.png" rel="icon">
 
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css?family=Open+Sans|Nunito|Poppins" rel="stylesheet">
 
   <!-- Vendor CSS Files -->
-  <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-  <link href="vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
 
   <!-- Custom CSS -->
-  <link href="css/style.css" rel="stylesheet">
+  <link href="assets/css/style.css" rel="stylesheet">
   <!--<link href="css/kita.css" rel="stylesheet">-->
 
   <style>
     /* Gambar Background pada Body */
     body {
-      background: rgba(179, 200, 207, 0.85) url('images/bg2.jpeg') no-repeat center center fixed;
+      background: rgba(179, 200, 207, 0.85) url('assets/images/bg2.jpeg') no-repeat center center fixed;
       background-size: cover;
       margin: 0;
       padding: 0;
@@ -123,31 +122,26 @@ require_once 'koneksi/koneksi.php';
       <div class="container">
         <div class="row justify-content-center">
           <div class="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
-
             <!-- Logo -->
             <div class="logo-container text-center py-1" style="padding-top: 0px;">
               <div class="logo d-flex align-items-center justify-content-center gap-1" style="padding-bottom: 5px;">
-                <img src="images/logo.png" alt="Logo DinkoRoom" class="img-fluid">
+                <img src="assets/images/logo.png" alt="Logo DinkoRoom" class="img-fluid">
                 <span class="dinko-text">
                   Ruang<span class="highlight">Ku</span><br>
                 </span>
               </div>
               <p>Dinkominfotik Kab. Brebes</p>
             </div>
-
-
-
-            <!-- Card Login -->
             <!-- Card Login -->
             <div class="card mb-4 login">
               <div class="card-body">
                 <div class="pt-3 pb-3">
                   <h5 class="card-title text-center" style="font-weight: 600; font-size: 18px !important;">Login Admin</h5>
                 </div>
-
-
+                <!-- form login -->
                 <form action="proses/login.php" method="POST" class="row g-3 needs-validation" novalidate>
                   <div class="col-12">
+                    <!-- username -->
                     <label for="yourUsername" class="form-label">Username</label>
                     <div class="input-group has-validation">
                       <span class="input-group-text">@</span>
@@ -155,21 +149,18 @@ require_once 'koneksi/koneksi.php';
                       <div class="invalid-feedback">Harap masukkan Username!</div>
                     </div>
                   </div>
-
+                  <!-- password -->
                   <div class="col-12">
                     <label for="yourPassword" class="form-label">Password</label>
                     <input type="password" name="password" class="form-control" id="yourPassword" required>
                     <div class="invalid-feedback">Harap masukkan Password!</div>
                   </div>
-
                   <div class="col-12" style="padding-top: 20px;">
                     <div class="d-flex justify-content-center">
-                      <button class="btn btn-primary w-75" type="submit">Login</button>
+                      <button class="btn btn-primary w-75" type="submit">Log In</button>
                     </div>
                   </div>
                 </form>
-
-
               </div>
             </div>
 

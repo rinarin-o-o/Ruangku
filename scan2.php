@@ -7,7 +7,6 @@ include('component/header.php');
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <title>QR Code Scanner</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
     <script src="./node_modules/html5-qrcode/html5-qrcode.min.js"></script>
     <style>
@@ -41,7 +40,7 @@ include('component/header.php');
 <main id="main" class="main">
     <div class="card">
         <div class="card-body">
-            <h5 class="card-title ">QRCode Scanner</h5>
+            <h5 class="card-title " style="font-size: 17px !important;">Pindai QR Code</h5>
             <!-- Tab Navigation -->
             <ul class="nav nav-tabs d-flex" id="myTabjustified" role="tablist">
                 <li class="nav-item flex-fill" role="presentation">
@@ -74,7 +73,7 @@ include('component/header.php');
 
         // Fungsi untuk menghitung qrbox dan fps berdasarkan lebar layar
         function getScanParameters() {
-            let qrbox = 300;
+            let qrbox = 400;
             let fps = 20;
 
             if (window.innerWidth <= 768) {

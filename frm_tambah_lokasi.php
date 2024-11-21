@@ -14,6 +14,7 @@ include('koneksi/koneksi.php');
       <form id="addLocationForm" method="POST" action="" style="padding-top: 20px;">
         <div class="row">
           <div class="col-md-6">
+            <!-- kategori -->
             <div class="row mb-2">
               <label for="kategori_lokasi" class="col-sm-3 col-form-label">Kategori <span style="color: red;">*</span></label>
               <div class="col-sm-8">
@@ -23,59 +24,56 @@ include('koneksi/koneksi.php');
                 </select>
               </div>
             </div>
-
-
+            <!-- kode ruang -->
             <div class="row mb-2">
               <label for="id_lokasi" class="col-sm-3 col-form-label">Kode Ruang <span style="color: red;">*</span></label>
               <div class="col-sm-8">
                 <input type="text" name="id_lokasi" class="form-control" id="id_lokasi" required>
               </div>
             </div>
-
+            <!-- nama ruang -->
             <div class="row mb-2">
               <label for="bid_lokasi" class="col-sm-3 col-form-label">Nama Ruang <span style="color: red;">*</span></label>
               <div class="col-sm-8">
                 <input type="text" name="bid_lokasi" class="form-control" id="bid_lokasi" required>
               </div>
             </div>
-          </div>
+          </div> <!-- end kolom -->
           <div class="col-md-6">
-
-
-
+            <!-- kode lokasi -->
             <div class="row mb-2">
               <label for="nama_lokasi" class="col-sm-3 col-form-label">Kode Lokasi</label>
               <div class="col-sm-8">
                 <input type="text" name="nama_lokasi" class="form-control" nama="id_lokasi">
               </div>
             </div>
-
+            <!-- nama lokasi -->
             <div class="row mb-2">
               <label for="tempat_lokasi" class="col-sm-3 col-form-label">Nama Lokasi <span style="color: red;">*</span></label>
               <div class="col-sm-8">
                 <input type="text" name="tempat_lokasi" class="form-control" id="tempat_lokasi" required>
               </div>
             </div>
-
+            <!-- keteraagn -->
             <div class="row mb-4">
               <label for="desk_lokasi" class="col-sm-3 col-form-label">Keterangan</label>
               <div class="col-sm-8">
                 <textarea name="desk_lokasi" class="form-control" id="desk_lokasi" rows="3"></textarea>
               </div>
             </div>
-
+            <!-- tombol -->
             <div class="row mb-4">
               <div class="col-sm-8 offset-sm-3 text-end">
                 <button type="submit" class="btn btn-primary">Simpan</button>
                 <a href="lokasi.php" class="btn btn-secondary">Batal</a>
               </div>
             </div>
-          </div>
-
-      </form><!-- End form -->
+          </div> <!-- end kolom -->
+        </div> <!-- end row -->
+      </form>
     </div>
-  </div>
-</main><!-- End Main Content -->
+  </div> <!-- end form --> 
+</main>
 
 <?php include("component/footer.php"); ?>
 

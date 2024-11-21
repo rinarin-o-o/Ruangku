@@ -1,105 +1,6 @@
 <?php
 include('component/header.php');
-include('koneksi/koneksi.php'); // Include DB connection
-
-$id_barang_pemda = isset($_GET['id_barang_pemda']) ? $_GET['id_barang_pemda'] : '';
-
-$sql_barang = "SELECT * FROM data_barang WHERE id_barang_pemda = '$id_barang_pemda'";
-$result_barang = mysqli_query($conn, $sql_barang);
-
-if (mysqli_num_rows($result_barang) > 0) {
-  $row_barang = mysqli_fetch_assoc($result_barang);
-  $kode_pemilik = $row_barang['kode_pemilik'];
-  $sql_pemilik = "SELECT nama_pemilik FROM pemilik WHERE kode_pemilik = '$kode_pemilik'";
-  $result_pemilik = mysqli_query($conn, $sql_pemilik);
-  $row_pemilik = mysqli_fetch_assoc($result_pemilik);
-
-  $nama_pemilik = isset($row_pemilik['nama_pemilik']) ? $row_pemilik['nama_pemilik'] : 'Pemilik tidak ditemukan';
-
-  $sql_locations = "SELECT * FROM lokasi";
-  $locations_result = mysqli_query($conn, $sql_locations);
-
-  $locations = [];
-  while ($location = mysqli_fetch_assoc($locations_result)) {
-    $locations[] = $location;
-  }
-} else {
-  echo "Data barang tidak ditemukan.";
-  exit;
-}
-
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-  $id_barang_pemda = $_POST['id_barang_pemda'];
-  $nama_barang = $_POST['nama_barang'];
-  $no_regristrasi = $_POST['no_regristrasi'];
-  $kode_pemilik = $_POST['kode_pemilik'];
-  $kode_barang = $_POST['kode_barang'];
-  $id_ruang_asal = $_POST['id_ruang_asal'];
-  $nama_ruang_asal = $_POST['nama_ruang_asal'];
-  $bidang_ruang_asal = $_POST['bidang_ruang_asal'];
-  $tempat_ruang_asal = $_POST['tempat_ruang_asal'];
-  $id_ruang_sekarang = $_POST['id_ruang_sekarang'];
-  $nama_ruang_sekarang = $_POST['nama_ruang_sekarang'];
-  $bidang_ruang_sekarang = $_POST['bidang_ruang_sekarang'];
-  $tempat_ruang_sekarang = $_POST['tempat_ruang_sekarang'];
-  $tgl_pembelian = $_POST['tgl_pembelian'];
-  $tgl_pembukuan = $_POST['tgl_pembukuan'];
-  $merk = $_POST['merk'];
-  $type = $_POST['type'];
-  $ukuran_CC = $_POST['ukuran_CC'];
-  $kategori = $_POST['kategori'];
-  $no_pabrik = $_POST['no_pabrik'];
-  $no_rangka = $_POST['no_rangka'];
-  $no_bpkb = $_POST['no_bpkb'];
-  $bahan = $_POST['bahan'];
-  $no_mesin = $_POST['no_mesin'];
-  $no_polisi = $_POST['no_polisi'];
-  $kondisi_barang = $_POST['kondisi_barang'];
-  $masa_manfaat = $_POST['masa_manfaat'];
-  $harga_awal = str_replace(['Rp ', '.'], ['', ''], $_POST['harga_awal']); // Remove currency formatting
-  $harga_total = str_replace(['Rp ', '.'], ['', ''], $_POST['harga_total']); // Remove currency formatting
-  $keterangan = $_POST['keterangan'];
-
-  $update_sql = "UPDATE data_barang SET 
-    id_barang_pemda = '$id_barang_pemda',
-        nama_barang='$nama_barang',
-        no_regristrasi='$no_regristrasi',
-        kode_pemilik='$kode_pemilik',
-        kode_barang='$kode_barang',
-        id_ruang_asal='$id_ruang_asal',
-        nama_ruang_asal='$nama_ruang_asal',
-        bidang_ruang_asal='$bidang_ruang_asal',
-        tempat_ruang_asal='$tempat_ruang_asal',
-        id_ruang_sekarang='$id_ruang_sekarang',
-        nama_ruang_sekarang='$nama_ruang_sekarang',
-        bidang_ruang_sekarang='$bidang_ruang_sekarang',
-        tempat_ruang_sekarang='$tempat_ruang_sekarang',
-        bid_ruang='$bid_ruang',
-        tgl_pembelian='$tgl_pembelian',
-        tgl_pembukuan='$tgl_pembukuan',
-        merk='$merk',
-        type='$type',
-        kategori = '$kategori',
-        ukuran_CC='$ukuran_CC',
-        no_pabrik='$no_pabrik',
-        no_rangka='$no_rangka',
-        no_bpkb='$no_bpkb',
-        bahan='$bahan',
-        no_mesin='$no_mesin',
-        no_polisi='$no_polisi',
-        kondisi_barang='$kondisi_barang',
-        masa_manfaat='$masa_manfaat',
-        harga_awal='$harga_awal',
-        harga_total='$harga_total',
-        keterangan='$keterangan'
-        WHERE id_barang_pemda='$id_barang_pemda'";
-
-  if (mysqli_query($conn, $update_sql)) {
-    echo "Data barang berhasil diperbarui.";
-  } else {
-    echo "Gagal memperbarui data barang: " . mysqli_error($conn);
-  }
-}
+include('proses/barang/get data/get_data_edit_barang.php');
 ?>
 
 <main id="main" class="main">
@@ -120,7 +21,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <input type="text" id="id_barang_pemda" name="id_barang_pemda" class="form-control" value="<?php echo htmlspecialchars($row_barang['id_barang_pemda']); ?>" readonly style="background-color: #f0f0f0;">
               </div>
             </div>
-
             <!-- Nama Barang -->
             <div class="row mb-2">
               <label for="nama_barang" class="col-sm-3 col-form-label-kita">Nama Aset<span style="color: red;">*</span></label>
@@ -128,7 +28,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <input type="text" id="nama_barang" name="nama_barang" class="form-control" value="<?php echo htmlspecialchars($row_barang['nama_barang']); ?>" required>
               </div>
             </div>
-
             <!-- Kode Barang -->
             <div class="row mb-2">
               <label for="kode_barang" class="col-sm-3 col-form-label-kita">Kode Aset</label>
@@ -136,19 +35,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <input type="text" id="kode_barang" name="kode_barang" class="form-control readonly-input" value="<?php echo htmlspecialchars($row_barang['kode_barang']); ?>" readonly style="background-color: #f0f0f0;">
               </div>
             </div>
-
             <!--pemilik-->
             <div class="row mb-2">
               <label for="kode_pemilik" class="col-sm-3 col-form-label-kita">Pemilik</label>
               <div class="col-sm-8">
-                <!-- Hidden input for kode_pemilik -->
-                <input type="hidden" id="kode_pemilik" name="kode_pemilik" value="<?php echo htmlspecialchars($row_barang['kode_pemilik']); ?>">
-
-                <!-- Display input with kode_pemilik and nama_pemilik -->
+                <input type="hidden" id="kode_pemilik" name="kode_pemilik" value="<?php echo htmlspecialchars($row_barang['kode_pemilik']); ?>"> <!-- Hidden input kode_pemilik -->
                 <input type="text" id="pemilik" name="pemilik_display" class="form-control readonly-input" value="<?php echo htmlspecialchars($row_barang['kode_pemilik'] . ' - ' . $nama_pemilik); ?>" readonly style="background-color: #f0f0f0;">
               </div>
             </div>
-
             <!-- No. Registrasi -->
             <div class="row mb-2">
               <label for="no_regristrasi" class="col-sm-3 col-form-label-kita">No. Reg</label>
@@ -156,7 +50,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <input type="text" id="no_regristrasi" name="no_regristrasi" class="form-control readonly-input" value="<?php echo htmlspecialchars($row_barang['no_regristrasi']); ?>" readonly style="background-color: #f0f0f0;">
               </div>
             </div>
-
             <!-- Lokasi Asal -->
             <div class="row mb-2">
               <label for="lokasi_asal" class="col-sm-3 col-form-label-kita">Ruang Asal</label>
@@ -164,15 +57,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <input type="text" id="lokasi_asal" class="form-control readonly-input" value="<?php echo $row_barang['id_ruang_asal'] . ' - ' . $row_barang['bidang_ruang_asal']; ?>" readonly style="background-color: #f0f0f0;">
               </div>
             </div>
-
-            <!-- Hidden Inputs for Lokasi Asal -->
+            <!-- Hidden Input  Lokasi Asal -->
             <input type="hidden" name="id_ruang_asal" value="<?php echo $row_barang['id_ruang_asal']; ?>">
             <input type="hidden" name="nama_ruang_asal" value="<?php echo $row_barang['nama_ruang_asal']; ?>">
-            <input type="hidden" name="bidang_ruang_asal" value="<?php echo $row_barang['bidang_ruang_asal']; ?>">
-            <input type="hidden" name="tempat_ruang_asal" value="<?php echo $row_barang['tempat_ruang_asal']; ?>">
-
-
-
+            <input type="hidden" name="bidang_ruang_asal" value="<?php echo $row_barang['bidang_ruang_asal']; ?>"> <input type="hidden" name="tempat_ruang_asal" value="<?php echo $row_barang['tempat_ruang_asal']; ?>">
             <!-- Lokasi Sekarang -->
             <div class="row mb-2">
               <label for="lokasi_sekarang" class="col-sm-3 col-form-label-kita">Ruang Sekarang<span style="color: red;">*</span></label>
@@ -188,55 +76,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 </select>
               </div>
             </div>
-
-            <!-- Hidden inputs untuk menyimpan data lokasi sekarang -->
+            <!-- Hidden input lokasi sekarang -->
             <input type="hidden" id="id_ruang_sekarang" name="id_ruang_sekarang" value="<?php echo htmlspecialchars($row_barang['id_ruang_sekarang']); ?>">
             <input type="hidden" id="nama_ruang_sekarang" name="nama_ruang_sekarang" value="<?php echo htmlspecialchars($row_barang['nama_ruang_sekarang']); ?>">
             <input type="hidden" id="bid_ruang_sekarang" name="bid_ruang_sekarang" value="<?php echo htmlspecialchars($row_barang['bidang_ruang_sekarang']); ?>">
             <input type="hidden" id="tempat_ruang_sekarang" name="tempat_ruang_sekarang" value="<?php echo htmlspecialchars($row_barang['tempat_ruang_sekarang']); ?>">
-
-            <script>
-              // Fungsi untuk menangani perubahan pada dropdown lokasi
-              function handleLocationChange() {
-                var selectElement = document.getElementById('lokasi_sekarang');
-                var selectedValue = selectElement.value;
-
-                // Update hidden inputs jika pengguna memilih lokasi yang ada
-                if (selectedValue !== "other" && selectedValue !== "") {
-                  var selectedOption = selectElement.options[selectElement.selectedIndex];
-                  document.getElementById('id_ruang_sekarang').value = selectedValue;
-                  document.getElementById('nama_ruang_sekarang').value = selectedOption.getAttribute('data-nama');
-                  document.getElementById('bid_ruang_sekarang').value = selectedOption.getAttribute('data-bid');
-                  document.getElementById('tempat_ruang_sekarang').value = selectedOption.getAttribute('data-tempat');
-                } else if (selectedValue === "other") {
-                  // Buka halaman tambah lokasi di tab baru jika memilih "Tambah Ruang/lokasi Baru"
-                  window.open("frm_tambah_lokasi.php", "_blank");
-                } else {
-                  // Reset hidden inputs jika tidak ada lokasi yang dipilih
-                  document.getElementById('id_ruang_sekarang').value = "";
-                  document.getElementById('nama_ruang_sekarang').value = "";
-                  document.getElementById('bid_ruang_sekarang').value = "";
-                  document.getElementById('tempat_ruang_sekarang').value = "";
-                }
-              }
-
-              // Jalankan fungsi untuk mengisi hidden inputs ketika halaman dimuat
-              window.onload = function() {
-                handleLocationChange();
-              };
-            </script>
-
-
-            <!-- Kategori (Opsional) -->
+            <!-- Kategori -->
             <div class="row mb-2">
               <label for="kategori" class="col-sm-3 col-form-label-kita">Kategori</label>
               <div class="col-sm-8">
                 <select id="kategori" name="kategori" class="form-select" onchange="handleCategoryChange()">
                   <option value="">Pilih Kategori</option>
-                  <option value="kendaraan" <?php echo ($row_barang['kategori'] == 'kendaraan') ? 'selected' : ''; ?>>Kendaraan</option>
-                  <option value="peralatan" <?php echo ($row_barang['kategori'] == 'peralatan') ? 'selected' : ''; ?>>Peralatan</option>
-                  <option value="mesin" <?php echo ($row_barang['kategori'] == 'mesin') ? 'selected' : ''; ?>>Mesin</option>
-                  <option value="elektronik" <?php echo ($row_barang['kategori'] == 'elektronik') ? 'selected' : ''; ?>>Elektronik</option>
+                  <option value="Barang Tetap" <?php echo ($row_barang['kategori'] == 'Barang Tetap') ? 'selected' : ''; ?>>Barang Tetap</option>
+                  <option value="Barang Bergerak (Peralatan)" <?php echo ($row_barang['kategori'] == 'Barang Bergerak (Peralatan)') ? 'selected' : ''; ?>>Barang Bergerak (Peralatan)</option>
+                  <option value="Barang Bergerak (Elektronik)" <?php echo ($row_barang['kategori'] == 'Barang Bergerak (Elektronik)') ? 'selected' : ''; ?>>Barang Bergerak (Elektronik)</option>
+                  <option value="Barang Bergerak (Kendaraan)" <?php echo ($row_barang['kategori'] == 'Barang Bergerak (Kendaraan)') ? 'selected' : ''; ?>>Barang Bergerak (Kendaraan)</option>
                 </select>
               </div>
             </div>
@@ -279,101 +133,97 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 </select>
               </div>
             </div>
-          </div>
-
+          </div> <!-- end kolom -->
           <div class="col-md-6">
-            <!-- Merk (Opsional) -->
+            <!-- Merk -->
             <div class="row mb-2">
               <label for="merk" class="col-sm-3 col-form-label-kita">Merk</label>
               <div class="col-sm-8">
                 <input type="text" id="merk" name="merk" class="form-control" value="<?php echo isset($row_barang['merk']) ? htmlspecialchars($row_barang['merk']) : ''; ?>">
               </div>
             </div>
-
-            <!-- Type (Opsional) -->
+            <!-- Type -->
             <div class="row mb-2">
               <label for="type" class="col-sm-3 col-form-label-kita">Tipe</label>
               <div class="col-sm-8">
                 <input type="text" id="type" name="type" class="form-control" value="<?php echo isset($row_barang['type']) ? htmlspecialchars($row_barang['type']) : ''; ?>">
               </div>
             </div>
-
-            <!-- Bahan (Opsional) -->
+            <!-- Bahan -->
             <div class="row mb-2">
               <label for="bahan" class="col-sm-3 col-form-label-kita">Bahan</label>
               <div class="col-sm-8">
                 <input type="text" id="bahan" name="bahan" class="form-control" value="<?php echo htmlspecialchars($row_barang['bahan']); ?>">
               </div>
             </div>
-
-            <!-- Ukuran/CC (Opsional) -->
+            <!-- Ukuran/CC -->
             <div class="row mb-2">
               <label for="ukuran_CC" class="col-sm-3 col-form-label-kita">Ukuran / CC</label>
               <div class="col-sm-8">
                 <input type="text" id="ukuran_CC" name="ukuran_CC" class="form-control" value="<?php echo isset($row_barang['ukuran_CC']) ? htmlspecialchars($row_barang['ukuran_CC']) : ''; ?>">
               </div>
             </div>
-
-            <!-- No. Pabrik (Opsional) -->
+            <!-- No. Pabrik -->
             <div class="row mb-2">
               <label for="no_pabrik" class="col-sm-3 col-form-label-kita">No. Pabrik</label>
               <div class="col-sm-8">
                 <input type="text" id="no_pabrik" name="no_pabrik" class="form-control" value="<?php echo isset($row_barang['no_pabrik']) ? htmlspecialchars($row_barang['no_pabrik']) : ''; ?>">
               </div>
             </div>
-
-            <!-- No. Rangka (Opsional) -->
+            <!-- No. Rangka -->
             <div class="row mb-2">
               <label for="no_rangka" class="col-sm-3 col-form-label-kita">No. Rangka</label>
               <div class="col-sm-8">
                 <input type="text" id="no_rangka" name="no_rangka" class="form-control" value="<?php echo isset($row_barang['no_rangka']) ? htmlspecialchars($row_barang['no_rangka']) : ''; ?>">
               </div>
             </div>
-
-            <!-- no_mesin (Opsional) -->
+            <!-- no_mesin -->
             <div class="row mb-2">
               <label for="no_mesin" class="col-sm-3 col-form-label-kita">No. mesin</label>
               <div class="col-sm-8">
                 <input type="text" id="no_mesin" name="no_mesin" class="form-control" value="<?php echo isset($row_barang['no_mesin']) ? htmlspecialchars($row_barang['no_mesin']) : ''; ?>">
               </div>
             </div>
-
-            <!-- No. BPKB (Opsional) -->
+            <!-- No. BPKB -->
             <div class="row mb-2">
               <label for="no_bpkb" class="col-sm-3 col-form-label-kita">No. BPKB</label>
               <div class="col-sm-8">
                 <input type="text" id="no_bpkb" name="no_bpkb" class="form-control" value="<?php echo isset($row_barang['no_bpkb']) ? htmlspecialchars($row_barang['no_bpkb']) : ''; ?>">
               </div>
             </div>
-
-            <!-- no_polisi (Opsional) -->
+            <!-- no_polisi -->
             <div class="row mb-2">
               <label for="no_polisi" class="col-sm-3 col-form-label-kita">No. Polisi</label>
               <div class="col-sm-8">
                 <input type="text" id="no_polisi" name="no_polisi" class="form-control" value="<?php echo isset($row_barang['no_polisi']) ? htmlspecialchars($row_barang['no_polisi']) : ''; ?>">
               </div>
             </div>
+            <input type="hidden" name="masa_stnk" value="<?php echo htmlspecialchars($row_barang['masa_stnk'] ?? ''); ?>">
+            <input type="hidden" name="masa_no_polisi" value="<?php echo htmlspecialchars($row_barang['masa_no_polisi'] ?? ''); ?>">
+            <input type="hidden" name="status_stnk" value="<?php echo htmlspecialchars($row_barang['status_stnk'] ?? ''); ?>">
+            <input type="hidden" name="status_no_polisi" value="<?php echo htmlspecialchars($row_barang['status_no_polisi'] ?? ''); ?>">
+            <input type="hidden" name="pengguna" value="<?php echo htmlspecialchars($row_barang['pengguna'] ?? ''); ?>">
+            <input type="hidden" name="tgl_bayar_stnk" value="<?php echo htmlspecialchars($row_barang['tgl_bayar_stnk'] ?? ''); ?>">
+            <input type="hidden" name="tgl_bayar_no_polisi" value="<?php echo htmlspecialchars($row_barang['tgl_bayar_no_polisi'] ?? ''); ?>">
 
-
-
+            <!-- keterangan -->
             <div class="row mb-2">
               <label for="keterangan" class="col-sm-3 col-form-label-kita">keterangan</label>
               <div class="col-sm-8">
                 <textarea name="keterangan" class="form-control" id="keterangan" value="<?php echo isset($row_barang['keterangan']) ? htmlspecialchars($row_barang['keterangan']) : ''; ?>"></textarea>
               </div>
             </div>
-
+            <!-- hidden input pemeliharaan -->
             <input type="hidden" name="harga_total" value="<?php echo htmlspecialchars($row_barang['harga_total']); ?>">
-
             <!-- Foto Barang -->
             <div class="row mb-2">
               <label for="foto_barang" class="col-sm-3 col-form-label-kita">Foto Barang:</label>
               <div class="col-sm-8">
                 <?php if (!empty($row_barang['foto_barang'])) : ?>
-                  <img src="images/<?php echo htmlspecialchars($row_barang['foto_barang']); ?>" alt="Foto Barang" style="max-width: 200px;">
+                  <img src="assets/images/<?php echo htmlspecialchars($row_barang['foto_barang']); ?>" alt="Foto Barang" style="max-width: 200px; margin-bottom: 10px;">
                 <?php endif; ?>
-                <input type="file" id="foto_barang" name="foto_barang" class="form-control">
-                <small class="text-muted">Unggah file gambar (JPEG, PNG)</small>
+                <input type="file" id="foto_barang" name="foto_barang" class="form-control" style="margin-top: 10px;">
+                <small class="text-muted">Unggah file gambar (JPEG, JPG, PNG)</small>
               </div>
             </div>
 
@@ -384,12 +234,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <a href="Data_barang.php" class="btn btn-secondary">Batal</a>
               </div>
             </div>
-          </div>
-        </div>
+          </div> <!-- end kolom -->
+        </div> <!-- end row -->
       </form>
     </div>
-  </div><!-- End Form Edit Barang -->
-</main><!-- End #main -->
+  </div><!-- End card Edit Barang -->
+</main>
 
 <?php include("component/footer.php"); ?>
 
@@ -415,19 +265,3 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     });
   });
 </script>
-
-<!-- Menangani Pesan Error dari Session -->
-<?php
-if (isset($_SESSION['error'])) {
-  echo "<script>
-        Swal.fire({
-            title: 'Error!',
-            text: '" . $_SESSION['error'] . "',
-            icon: 'error',
-            confirmButtonText: 'OK'
-        });
-    </script>";
-  // Hapus error setelah ditampilkan
-  unset($_SESSION['error']);
-}
-?>

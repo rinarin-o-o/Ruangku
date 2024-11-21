@@ -9,8 +9,7 @@
   <meta content="" name="keywords">
 
   <!-- Favicons -->
-  <link rel="icon" href="http://localhost/Ruangku/images/logo.png">
-  <link href="images/apple-touch-icon.png" rel="apple-touch-icon">
+  <link rel="icon" href="http://localhost/Ruangku/assets/images/logo.png">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notiflix/dist/notiflix-3.2.6.min.css" />
   <!-- Google Fonts -->
   <link href="https://fonts.gstatic.com" rel="preconnect">
