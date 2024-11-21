@@ -1,4 +1,5 @@
 <?php
+include("proses/kendaraan/get_data_kendaraan.php");
 session_start();
 $nama_admin = $_SESSION['nama_admin'];
 $foto_admin = $_SESSION['foto_admin'];
@@ -101,56 +102,91 @@ $foto_admin = $_SESSION['foto_admin'];
 <body>
 
   <!-- ======= Header ======= -->
-  <header id="header" class="header fixed-top d-flex align-items-center">
-    <div class="d-flex align-items-center justify-content-between">
-      <i class="bi bi-list toggle-sidebar-btn"></i>
-      <a href="#" class="logo d-flex align-items-center" style="margin-left: 20px;">
-        <img src="images/logo.png" alt="" style="width:auto; height:40px;">
-        <span class="d-inline-block">Ruang<span style="color: #72a7df;">Ku</span></span>
-      </a>
-    </div>
+<header id="header" class="header fixed-top d-flex align-items-center">
+  <div class="d-flex align-items-center justify-content-between">
+    <i class="bi bi-list toggle-sidebar-btn"></i>
+    <a href="#" class="logo d-flex align-items-center" style="margin-left: 20px;">
+      <img src="images/logo.png" alt="" style="width:auto; height:40px;">
+      <span class="d-inline-block">Ruang<span style="color: #72a7df;">Ku</span></span>
+    </a>
+  </div>
 
-    <nav class="header-nav ms-auto">
-      
-      <ul class="d-flex align-items-center">
-        <li class="nav-item dropdown pe-3">
-          <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
-            <?php if (empty($foto_admin)) : ?>
-              <i class="bi bi-person-circle rounded-circle" style="font-size: 24px;"></i>
-            <?php else : ?>
-              <img src="images/<?php echo $foto_admin; ?>" alt="Profile" class="rounded-circle">
-            <?php endif; ?>
-            <span class="d-none d-md-block dropdown-toggle ps-2"><?php echo $nama_admin; ?></span>
-          </a>
+  <nav class="header-nav ms-auto">
+    <ul class="d-flex align-items-center">
+      <!-- Notifikasi Ikon -->
+      <li class="nav-item dropdown pe-3">
+        <a class="nav-link" href="#" id="notificationIcon" data-bs-toggle="dropdown" aria-expanded="false">
+          <i class="bi bi-bell"></i>
+          <!-- Badge untuk menunjukkan jumlah kendaraan yang pajaknya belum lunas dan kendaraan dengan no polisi tidak aktif -->
+          <span class="badge bg-danger" id="notificationCount">
+            <?php echo $count_unpaid_tax + $count_unpaid_tax2; ?>
+          </span>
+        </a>
+        <ul class="dropdown-menu" aria-labelledby="notificationIcon">
+          <!-- Kendaraan Pajak Belum Lunas -->
+          <li><h6 class="dropdown-header">Kendaraan dengan Pajak Belum Lunas</h6></li>
+          <li><hr class="dropdown-divider"></li>
+          <?php
+            // Menampilkan daftar kendaraan yang pajaknya belum lunas
+            foreach ($unpaid_tax_vehicles as $vehicle) {
+              echo "<li><a class='dropdown-item' href='/ruangku-main/frm_edit_kendaraan.php?id_barang_pemda={$vehicle['id_barang_pemda']}'>
+                      {$vehicle['nama_barang']} - {$vehicle['no_polisi']}
+                    </a></li>";
+            }
+          ?>
+          
+          <!-- Kendaraan dengan No Polisi Tidak Aktif -->
+          <li><h6 class="dropdown-header">Kendaraan dengan No Polisi Tidak Aktif</h6></li>
+          <li><hr class="dropdown-divider"></li>
+          <?php
+            // Menampilkan daftar kendaraan yang no plat nya tidak aktif
+            foreach ($unpaid_tax_vehicles2 as $vehicle) {
+              echo "<li><a class='dropdown-item' href='/ruangku-main/frm_edit_kendaraan.php?id_barang_pemda={$vehicle['id_barang_pemda']}'>
+                      {$vehicle['nama_barang']} - {$vehicle['no_polisi']}
+                    </a></li>";
+            }
+          ?>
+        </ul>
+      </li>
 
-          <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
-            <li class="dropdown-header">
-              <h6>
-                <?php
+      <!-- Profil Admin -->
+      <li class="nav-item dropdown pe-3">
+        <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
+          <?php if (empty($foto_admin)) : ?>
+            <i class="bi bi-person-circle rounded-circle" style="font-size: 24px;"></i>
+          <?php else : ?>
+            <img src="images/<?php echo $foto_admin; ?>" alt="Profile" class="rounded-circle">
+          <?php endif; ?>
+          <span class="d-none d-md-block dropdown-toggle ps-2"><?php echo $nama_admin; ?></span>
+        </a>
+
+        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
+          <li class="dropdown-header">
+            <h6>
+              <?php
                 if (empty($nama_admin)) :
                   echo 'admin dinkominfotik';
                 else :
                   echo $nama_admin;
                 endif;
-                ?>
-              </h6>
-              <span>Admin</span>
-            </li>
+              ?>
+            </h6>
+            <span>Admin</span>
+          </li>
 
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-            <li>
-              <a class="dropdown-item d-flex align-items-center" href="#" id="logoutBtn">
-                <i class="bi bi-box-arrow-right"></i>
-                <span>Log Out</span>
-              </a>
-            </li>
-          </ul>
-        </li>
-      </ul>
-    </nav>
-  </header>
+          <li><hr class="dropdown-divider"></li>
+          <li>
+            <a class="dropdown-item d-flex align-items-center" href="#" id="logoutBtn">
+              <i class="bi bi-box-arrow-right"></i>
+              <span>Log Out</span>
+            </a>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </nav>
+</header>
+
 
   <!-- ======= Sidebar ======= -->
   <aside id="sidebar" class="sidebar">
