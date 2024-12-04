@@ -143,7 +143,7 @@ if (mysqli_num_rows($result) == 1) {
                                             $file_extension = pathinfo($row['file_upload'], PATHINFO_EXTENSION);
                                             // Menampilkan pratinjau jika file adalah PDF
                                             if (in_array(strtolower($file_extension), ['pdf'])) {
-                                                echo '<iframe src="uploads/mutasi/' . htmlspecialchars($row['file_upload']) . '" width="100%" height="500px"></iframe>';
+                                                echo '<iframe src="uploads/mutasi/' . htmlspecialchars($row['file_upload']) . '" width="100%" height="2 50px"></iframe>';
                                             }
                                             // Menampilkan pratinjau jika file adalah gambar
                                             elseif (in_array(strtolower($file_extension), ['jpg', 'jpeg', 'png'])) {
